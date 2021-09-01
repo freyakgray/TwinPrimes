@@ -17,7 +17,7 @@ A star means the name is up for revision
 # Limiting Hexa*: The greatest hexa being considered in a given observation
 # Subtending Hexa*: the second-greatest hexa being considered in a given observation
 # Critical area: The indices between those of the square of the subtending and limiting hexas
-   e.g. ifwe are considering the first 4 hexas [5, 7, 11, 13], 13 is the limiting hexa, 11 is the subtending hexa, and the critical area
+   e.g. if we are considering the first 4 hexas [5, 7, 11, 13], 13 is the limiting hexa, 11 is the subtending hexa, and the critical area
    lies between 11^2 = 121 and 13^2 = 169. Since these must also be hexas (see Hexas note a), this can also refer to the area
    between the sextands of these numbers, i.e. instead of 121 - 169, it is 20 - 28
 # Hexorial: The product of the first n hexas
@@ -60,7 +60,7 @@ INPUT:
    length: The number of index combinations to be displayed
    start: The starting index of the chain to be displayed
 OUTPUT: Displays the combos for the indices starting at start and ending at start + length; also marks valid combos 
-NOTES: Want to implement a check to make sure hexasNum < generated hexas; may also want to change name for cllarity
+NOTES: Want to implement a check to make sure hexasNum < generated hexas; may also want to change name for clarity
 
 # void viewCritArea(int n)
 INPUT:
