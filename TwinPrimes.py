@@ -1,5 +1,5 @@
-# This is an analytical tool for gathering data about a particular set of integers, dubbed "hexadjacents", or "hexas"
-# Contributors: Robbie Jordan, Freya Grey, Lucas Nieddu
+"""This is an analytical tool for gathering data about a particular set of integers, dubbed "hexadjacents", or "hexas"
+Contributors: Robbie Jordan, Freya Gray, Lucas Nieddu"""
 
 
 ##### DEFINITIONS AND PROPERTIES #####
@@ -30,24 +30,75 @@
 #   - e.g. if h{} = {5, 7}, then the combination at i = 8 is {3, 1}, since 8 === 3 mod 5 and 8 === 1 mod 7
 # a) A combination is "valid" if the index is valid with respect to all hexas in h{}; otherwise it is invalid.
 
+def generateHexas(n):
+    """INPUT: n: the number of hexas to be examined during the run of the program
+    OUTPUT: An int array containing the first n positive hexas, as well as an array of the first n sextands
+    NOTES: May be better implemented as a simple startup procedure within main()"""
+    print(n)
 
-##### FUNCTIONS #####
-# int[] generateHexas(int n)
+def findInvalidChains():
+    """INPUT: none
+    OUTPUT: Determines the longest chain of consecutive invalid indices. Prints out the starting index of this chain and its length"""
+    print()
 
-# void findInvalidChains()
+def viewChains(hexasNum, length, start):
+    """INPUT:hexasNum: The number of hexas checked (must be less than the number of hexas generated)
+   length: The number of index combinations to be displayed
+   start: The starting index of the chain to be displayed
+   OUTPUT: Displays the combos for the indices starting at start and ending at start + length; also marks valid combos 
+   NOTES: Want to implement a check to make sure hexasNum < generated hexas; may also want to change name for clarity
+   """
+    print(hexasNum)
 
-# void viewChains(int hexasNum, int length, int start)
+def viewCritArea(n):
+    """INPUT: n: The index of the highest hexa in the array of generated hexas.
+    OUTPUT: Displays the start and end indices of the critical area being examined
+    Notes: Want to implement a check to ensure n < generated hexas """
+    print()
 
-# void viewCritArea(int n)
 
-# void viewCombos(int hexasNum, int length, int start)
+def viewCombos(hexasNum, lenght, start):
+    """INPUT:hexasNum: The number of hexas checked (must be less than the number of hexas generated)
+    length: The number of index combinations to be displayed
+    start: The starting index of the chain to be displayed
+    OUTPUT: Displays the combos for the indices starting at start and ending at start + length; also marks valid combos 
+    NOTES: Want to implement a check to make sure hexasNum < generated hexas; may also want to change name for clarity
+   
+    NOTES: Same input/output as viewChains, except the latter allows custom hexa inputs, but this one uses the CHECK_LIMIT defined in main()
+    ~ May want to deprecate this """
+    print()
 
-# void viewCritCombos()
+def viewCritCombos():
+    """INPUTS: none
+    OUTPUTS: displays the combos in the critical area
+    NOTES: Can use viewCombos() or viewChains() """
+    print()
 
-# void findAverageGap()
+def findAverageGap():
+    """INPUTS: none
+    OUTPUTS: Displays the expected average gap between valid combos (hexorial / Lexorial)
+    NOTES: May want to take an input and find the average gap in that range (e.g. if n = 2, find the average gap in [0, (5*7)) range
+    """
+    print()
 
-# public static void validCoordinates(int hexasNum)
+def validCoordinates(hexasNum):
+    """INPUTS:
+    hexasNum: The number of hexas being examined
+    OUTPUT: .txt document given the coordinates where x is the number of hexas checked and y is the number of valid combos in critical area
+    """
+    print()
 
-# void generateCombos(int hexasNum)
+def generateCombos(hexasNum):
+    """INPUTS:
+    hexasNum: The number of hexas being examined (e.g. if hexasnum = 3, then 5,7, and 11 are being examined)
+    OUTPUTS: Combines functionality of findInvalidChains() and viewChains()
+    """
+    print()
 
-# void validNumApproximation()
+def validNumApproximation():
+    """INPUTS: none
+    ~ Uses the CHECK_LIMIT number defined in main(), i.e. the default number of hexas
+    OUTPUTS: Calculates an approximated for the expected number of valid combos within the domain (i.e. [1, A] where A is the upper bound of
+   the critical area), counts the true number of valid combos within the domain, and displays the error between them
+    """
+    print
