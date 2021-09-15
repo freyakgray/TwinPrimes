@@ -1,4 +1,4 @@
-# This document outlines the functions to be used in the group's project
+a# This document outlines the functions to be used in the group's project
 # Created By Robbie Jordan, Freya Gray, 
 
 
@@ -14,13 +14,16 @@ A star means the name is up for revision
  c) 1 can technically be considered a hexa, but is disregarded due to unusual properties that make it less useful
    - It is only useful for us to consider hexas where x > 0, but it could technically be generalized to be any integer
 # Sextand: For a given hexa 6x - 1 or 6x + 1, x is the sextand (e.g. 11 = (6 * 2) - 1, thus the sextand of 11 is 2)
+ a) s(h) denotes the sextand of the hexa h
+   ~ e.g. s(11) = 2
+   ~ For the sake of the definition, if the argument is not a hexa, the statement s(h) is undefined
 # Limiting Hexa*: The greatest hexa being considered in a given observation
 # Subtending Hexa*: the second-greatest hexa being considered in a given observation
-# Critical area: The indices between those of the square of the subtending and limiting hexas
-   e.g. if we are considering the first 4 hexas [5, 7, 11, 13], 13 is the limiting hexa, 11 is the subtending hexa, and the critical area
-   lies between 11^2 = 121 and 13^2 = 169. Since these must also be hexas (see Hexas note a), this can also refer to the area
-   between the sextands of these numbers, i.e. instead of 121 - 169, it is 20 - 28
-   a) If g is the sextand of the limiting and subtending hexas, then the critical area in the second form is [6g^2 - 2g, 6g^2 + 2g]
+# Critical area: The indices between 0 and the sextand of the square of the limiting hexa
+ a) If the limiting hexa is in the form 6g + 1, then the critical area is [0, 6g^2 + 2g]; 
+    If the limiting hexa is in the form 6g - 1, then the critical area is [0, 6g^2 - 2g]
+  ~ e.g. if we are considering the first 4 hexas [5, 7, 11, 13], 13 is the limiting hexa, 11 is the subtending hexa, and the critical area
+    lies in [0, s(13^2)] = [0, s(169)] = [0, 28].
 # Hexorial: n^ is the product of the first n hexas (notation can be debated; it is meant to be the Japanese character "he", for "hexorial"
 # Lesser Hexorial (Lexorial*): n^- is the product of the first n hexas less 2 (i.e. (5 - 2) * (7 - 2) * (11 - 2) * (13 - 2) * ...)
 # Sextand-modulo reduction*: Checking indices rather than multiples of 6
