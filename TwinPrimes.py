@@ -32,59 +32,55 @@ Contributors: Robbie Jordan, Freya Gray, Lucas Nieddu"""
 hexasList = []
 sextandsList = []
 squareSextandsList = []
+CHECK_LIMIT = 8 #number of hexas checked (min 2, max ARR) 
 
 def generateHexas(n, hexas = [], sextands = [], squareSextands = []):
     """INPUT: n: the number of hexas to be examined during the run of the program
     OUTPUT: An int array containing the first n positive hexas, as well as an array of the first n sextands
     NOTES: May be better implemented as a simple startup procedure within main()"""
-    for i in n
+    for i in n:
         sextands[i] = i + 1
         hexas[i] = 6 * (sextands[i]) - 1
         squareSextands[i] = 6 * (sextands[i] * sextands[i]) - (2 * sextands[i])
-        if i + 1 <= n
+        if i + 1 <= n:
             sextands[i + 1] = i + 1
             hexas[i + 1] = 6 * (sextands[i]) + 1
             squareSextands[i + 1] = 6 * (sextands[i + 1] * sextands[i + 1]) + (2 * sextands[i + 1])
-        i++ # Need to skip every other index
+        i+=1 # Need to skip every other index
         
 def findInvalidChains(n):
     """INPUT: n: the number of hexas to be examined during the run of the program
     OUTPUT: Determines the longest chain of consecutive invalid indices. Prints out the starting index of this chain and its length"""
-    if n > len(hexasList)
+    if n > len(hexasList):
         n = len(hexasList)
-   
     hexorial = 1
     invalidStart = 0
     invalidLength = 0
     maxInvalid = 0
-	valid = true;
-	for i in n
-		hexorial *= hexas[i];
-		
-    for i in (hexorial - 1) / 2) # Only need half the hexorial because validity is mirrored
-			valid = true;
-			
-			# check  if the index is valid With Respect To (WRT) each hexa checked
-			# NOTE: Take advantage of sextand-modulo reduction (only need to check sextand modulo h)
-			for j in n
-				if(i % hexasList[j] == sextandsList[i] or i % hexas[j] == hexas[j] - sextandsList[j])
-					valid = false;
+	valid = True
+	for i in n:
+		hexorial *= hexasList[i]	
+    for i in ((hexorial - 1) / 2): # Only need half the hexorial because validity is mirrored
+		valid = True
+		# check  if the index is valid With Respect To (WRT) each hexa checked
+		# NOTE: Take advantage of sextand-modulo reduction (only need to check sextand modulo h)
+		for j in n:
+			if(i % hexasList[j] == sextandsList[i] or i % hexasList[j] == hexasList[j] - sextandsList[j]):
+				valid = False
 			
 			# Update the length of the chain of consecutive invalid indices
-			if not(valid) {
-				invalidLength++
-				
-				if maxInvalid < invalidLength
+			if not(valid):
+				invalidLength+=1
+				if maxInvalid < invalidLength:
 					maxInvalid = invalidLength
 					invalidStart = i + 1 - maxInvalid
+			else:
+				invalidLength = 0
 
-			else
-				invalidLength = 0;
-
-		// Visual output
+		 #Visual output
 		print("Start of max chain: " + invalidStart + '\n'
 			+ "Max length chain: " + maxInvalid + '\n'
-			+ "Critical Zone size: " + (SqSextands[n - 1] - SqSextands[n - 2]));
+			+ "Critical Zone size: " + (squareSextandsList[n - 1] - squareSextandsList[n - 2]))
 
 def viewChains(hexasNum, length, start):
     """INPUT:hexasNum: The number of hexas checked (must be less than the number of hexas generated)
@@ -102,7 +98,7 @@ def viewCritArea(n):
     print()
 
 
-def viewCombos(hexasNum, lenght, start):
+def viewCombos(hexasNum, length, start):
     """INPUT:hexasNum: The number of hexas checked (must be less than the number of hexas generated)
     length: The number of index combinations to be displayed
     start: The starting index of the chain to be displayed
@@ -111,20 +107,38 @@ def viewCombos(hexasNum, lenght, start):
    
     NOTES: Same input/output as viewChains, except the latter allows custom hexa inputs, but this one uses the CHECK_LIMIT defined in main()
     ~ May want to deprecate this """
-    print()
+    combo = ""
+    valid = True
+    end = start + length
+    print("Hexas checked: " + str(CHECK_LIMIT) + "\n")
+    for i in range(start,end):
+        combo = str(i) + ": "
+        valid = True
+        for j in range(0, hexasNum):
+            combo += str(i % hexasList[j]) + " "
+            if i % hexasList[j] == 1 or i % hexasList[j] == hexasList[j] - 1:
+                valid = False 
+    if(valid):
+        combo += "< "
+    print(combo)
 
 def viewCritCombos():
     """INPUTS: none
     OUTPUTS: displays the combos in the critical area
     NOTES: Can use viewCombos() or viewChains() """
-    print()
+    viewCombos(CHECK_LIMIT, (squareSextandsList[CHECK_LIMIT-1]- squareSextandsList[CHECK_LIMIT- 2] + 1), squareSextandsList[CHECK_LIMIT - 2])
 
 def findAverageGap():
     """INPUTS: none
     OUTPUTS: Displays the expected average gap between valid combos (hexorial / Lexorial)
     NOTES: May want to take an input and find the average gap in that range (e.g. if n = 2, find the average gap in [0, (5*7)) range
     """
-    print()
+    gap, num, denom = 1,1,1
+    for i in range(0,CHECK_LIMIT):
+        num *= hexasList[i]
+        denom *= hexasList[i]-2
+        gap *= hexasList[i]/(hexasList[i]-2)
+    print(str(num) + " / " + str(denom) + "\n" + str(gap))
 
 def validCoordinates(hexasNum):
     """INPUTS:
