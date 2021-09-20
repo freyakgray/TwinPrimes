@@ -29,17 +29,62 @@ Contributors: Robbie Jordan, Freya Gray, Lucas Nieddu"""
 #$$$ Combintation/combo*: The set of remainders of an index i modulo h{}, where h{} denotes a set of hexas 
 #   - e.g. if h{} = {5, 7}, then the combination at i = 8 is {3, 1}, since 8 === 3 mod 5 and 8 === 1 mod 7
 # a) A combination is "valid" if the index is valid with respect to all hexas in h{}; otherwise it is invalid.
+hexasList = []
+sextandsList = []
+squareSextandsList = []
 
-def generateHexas(n):
+def generateHexas(n, hexas = [], sextands = [], squareSextands = []):
     """INPUT: n: the number of hexas to be examined during the run of the program
     OUTPUT: An int array containing the first n positive hexas, as well as an array of the first n sextands
     NOTES: May be better implemented as a simple startup procedure within main()"""
-    print(n)
-
-def findInvalidChains():
-    """INPUT: none
+    for i in n
+        sextands[i] = i + 1
+        hexas[i] = 6 * (sextands[i]) - 1
+        squareSextands[i] = 6 * (sextands[i] * sextands[i]) - (2 * sextands[i])
+        if i + 1 <= n
+            sextands[i + 1] = i + 1
+            hexas[i + 1] = 6 * (sextands[i]) + 1
+            squareSextands[i + 1] = 6 * (sextands[i + 1] * sextands[i + 1]) + (2 * sextands[i + 1])
+        i++ # Need to skip every other index
+        
+def findInvalidChains(n):
+    """INPUT: n: the number of hexas to be examined during the run of the program
     OUTPUT: Determines the longest chain of consecutive invalid indices. Prints out the starting index of this chain and its length"""
-    print()
+    if n > len(hexasList)
+        n = len(hexasList)
+   
+    hexorial = 1
+    invalidStart = 0
+    invalidLength = 0
+    maxInvalid = 0
+	valid = true;
+	for i in n
+		hexorial *= hexas[i];
+		
+    for i in (hexorial - 1) / 2) # Only need half the hexorial because validity is mirrored
+			valid = true;
+			
+			# check  if the index is valid With Respect To (WRT) each hexa checked
+			# NOTE: Take advantage of sextand-modulo reduction (only need to check sextand modulo h)
+			for j in n
+				if(i % hexasList[j] == sextandsList[i] or i % hexas[j] == hexas[j] - sextandsList[j])
+					valid = false;
+			
+			# Update the length of the chain of consecutive invalid indices
+			if not(valid) {
+				invalidLength++
+				
+				if maxInvalid < invalidLength
+					maxInvalid = invalidLength
+					invalidStart = i + 1 - maxInvalid
+
+			else
+				invalidLength = 0;
+
+		// Visual output
+		print("Start of max chain: " + invalidStart + '\n'
+			+ "Max length chain: " + maxInvalid + '\n'
+			+ "Critical Zone size: " + (SqSextands[n - 1] - SqSextands[n - 2]));
 
 def viewChains(hexasNum, length, start):
     """INPUT:hexasNum: The number of hexas checked (must be less than the number of hexas generated)
