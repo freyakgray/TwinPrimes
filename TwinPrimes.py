@@ -57,25 +57,26 @@ def findInvalidChains(n):
     invalidStart = 0
     invalidLength = 0
     maxInvalid = 0
-	valid = True
-	for i in n:
-		hexorial *= hexasList[i]	
-    for i in ((hexorial - 1) / 2): # Only need half the hexorial because validity is mirrored
-		valid = True
+    valid = True
+    
+    for i in n:
+        hexorial *= hexasList[i]	
+    for i in ((hexorial - 1) / 2):# Only need half the hexorial because validity is mirrored
+        valid = True
 		# check  if the index is valid With Respect To (WRT) each hexa checked
 		# NOTE: Take advantage of sextand-modulo reduction (only need to check sextand modulo h)
-		for j in n:
-			if(i % hexasList[j] == sextandsList[i] or i % hexasList[j] == hexasList[j] - sextandsList[j]):
-				valid = False
+        for j in n:
+            if(i % hexasList[j] == sextandsList[i] or i % hexasList[j] == hexasList[j] - sextandsList[j]):
+                valid = False
 			
 			# Update the length of the chain of consecutive invalid indices
-			if not(valid):
-				invalidLength+=1
-				if maxInvalid < invalidLength:
-					maxInvalid = invalidLength
-					invalidStart = i + 1 - maxInvalid
-			else:
-				invalidLength = 0
+            if not(valid):
+                invalidLength+=1
+                if maxInvalid < invalidLength:
+                    maxInvalid = invalidLength
+                    invalidStart = i + 1 - maxInvalid
+            else:
+                invalidLength = 0
 
 		 #Visual output
 		print("Start of max chain: " + invalidStart + '\n'
@@ -116,6 +117,7 @@ def viewCombos(hexasNum, length, start):
         valid = True
         for j in range(0, hexasNum):
             combo += str(i % hexasList[j]) + " "
+            #check for invalid moduli
             if i % hexasList[j] == 1 or i % hexasList[j] == hexasList[j] - 1:
                 valid = False 
     if(valid):
