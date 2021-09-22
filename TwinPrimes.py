@@ -99,19 +99,20 @@ def ViewCritArea(n):
     print()
 
 
-def ViewCombos(hexasNum, length, start):
+def ViewCombos(hexasNum, length, start, hexasChecked):
     """INPUT:hexasNum: The number of hexas checked (must be less than the number of hexas generated)
     length: The number of index combinations to be displayed
     start: The starting index of the chain to be displayed
+    hexasChecked: The number of hexas to be checked 
     OUTPUT: Displays the combos for the indices starting at start and ending at start + length; also marks valid combos 
     NOTES: Want to implement a check to make sure hexasNum < generated hexas; may also want to change name for clarity
    
-    NOTES: Same input/output as viewChains, except the latter allows custom hexa inputs, but this one uses the CHECK_LIMIT defined in main()
+    NOTES: Same input/output as viewChains, except the latter allows custom hexa inputs
     ~ May want to deprecate this """
     combo = ""
     valid = True
     end = start + length
-    print("Hexas checked: " + str(CHECK_LIMIT) + "\n")
+    print("Hexas checked: " + str(hexasChecked) + "\n")
     for i in range(start,end):
         combo = str(i) + ": "
         valid = True
@@ -124,19 +125,19 @@ def ViewCombos(hexasNum, length, start):
         combo += "< "
     print(combo)
 
-def ViewCritCombos():
-    """INPUTS: none
+def ViewCritCombos(hexasChecked):
+    """INPUT: hexasChecked: The number of hexas to be checked 
     OUTPUTS: displays the combos in the critical area
     NOTES: Can use viewCombos() or viewChains() """
-    ViewCombos(CHECK_LIMIT, (squareSextandsList[CHECK_LIMIT-1]- squareSextandsList[CHECK_LIMIT- 2] + 1), squareSextandsList[CHECK_LIMIT - 2])
+    ViewCombos(hexasChecked, (squareSextandsList[hexasChecked-1]- squareSextandsList[hexasChecked- 2] + 1), squareSextandsList[hexasChecked - 2])
 
-def FindAverageGap():
-    """INPUTS: none
+def FindAverageGap(hexasChecked):
+    """INPUTS: hexasChecked: The number of hexas to be checked 
     OUTPUTS: Displays the expected average gap between valid combos (hexorial / Lexorial)
     NOTES: May want to take an input and find the average gap in that range (e.g. if n = 2, find the average gap in [0, (5*7)) range
     """
     gap, num, denom = 1,1,1
-    for i in range(0,CHECK_LIMIT):
+    for i in range(0,hexasChecked):
         num *= hexasList[i]
         denom *= hexasList[i]-2
         gap *= hexasList[i]/(hexasList[i]-2)
