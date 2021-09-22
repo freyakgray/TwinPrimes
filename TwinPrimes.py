@@ -33,21 +33,21 @@ hexasList = []
 sextandsList = []
 squareSextandsList = []
 
-def generateHexas(n, hexas = [], sextands = [], squareSextands = []):
+def GenerateHexas(n):
     """INPUT: n: the number of hexas to be examined during the run of the program
     OUTPUT: An int array containing the first n positive hexas, as well as an array of the first n sextands
     NOTES: May be better implemented as a simple startup procedure within main()"""
     for i in n
-        sextands[i] = i + 1
-        hexas[i] = 6 * (sextands[i]) - 1
-        squareSextands[i] = 6 * (sextands[i] * sextands[i]) - (2 * sextands[i])
+        sextandsList[i] = i + 1
+        hexasList[i] = 6 * (sextandsList[i]) - 1
+        squareSextandsList[i] = 6 * (sextandsList[i] * sextandsList[i]) - (2 * sextandsList[i])
         if i + 1 <= n
-            sextands[i + 1] = i + 1
-            hexas[i + 1] = 6 * (sextands[i]) + 1
-            squareSextands[i + 1] = 6 * (sextands[i + 1] * sextands[i + 1]) + (2 * sextands[i + 1])
+            sextandsList[i + 1] = i + 1
+            hexasList[i + 1] = 6 * (sextands[i]) + 1
+            squareSextandsList[i + 1] = 6 * (sextandsList[i + 1] * sextandsList[i + 1]) + (2 * sextandsList[i + 1])
         i++ # Need to skip every other index
         
-def findInvalidChains(n):
+def FindInvalidChains(n):
     """INPUT: n: the number of hexas to be examined during the run of the program
     OUTPUT: Determines the longest chain of consecutive invalid indices. Prints out the starting index of this chain and its length"""
     if n > len(hexasList)
@@ -86,7 +86,7 @@ def findInvalidChains(n):
 			+ "Max length chain: " + maxInvalid + '\n'
 			+ "Critical Zone size: " + (SqSextands[n - 1] - SqSextands[n - 2]));
 
-def viewChains(hexasNum, length, start):
+def ViewChains(hexasNum, length, start):
     """INPUT:hexasNum: The number of hexas checked (must be less than the number of hexas generated)
    length: The number of index combinations to be displayed
    start: The starting index of the chain to be displayed
@@ -95,14 +95,14 @@ def viewChains(hexasNum, length, start):
    """
     print(hexasNum)
 
-def viewCritArea(n):
+def ViewCritArea(n):
     """INPUT: n: The index of the highest hexa in the array of generated hexas.
     OUTPUT: Displays the start and end indices of the critical area being examined
     Notes: Want to implement a check to ensure n < generated hexas """
     print()
 
 
-def viewCombos(hexasNum, lenght, start):
+def ViewCombos(hexasNum, lenght, start):
     """INPUT:hexasNum: The number of hexas checked (must be less than the number of hexas generated)
     length: The number of index combinations to be displayed
     start: The starting index of the chain to be displayed
@@ -113,37 +113,37 @@ def viewCombos(hexasNum, lenght, start):
     ~ May want to deprecate this """
     print()
 
-def viewCritCombos():
+def ViewCritCombos():
     """INPUTS: none
     OUTPUTS: displays the combos in the critical area
     NOTES: Can use viewCombos() or viewChains() """
     print()
 
-def findAverageGap():
+def FindAverageGap():
     """INPUTS: none
     OUTPUTS: Displays the expected average gap between valid combos (hexorial / Lexorial)
     NOTES: May want to take an input and find the average gap in that range (e.g. if n = 2, find the average gap in [0, (5*7)) range
     """
     print()
 
-def validCoordinates(hexasNum):
+def ValidCoordinates(hexasNum):
     """INPUTS:
     hexasNum: The number of hexas being examined
     OUTPUT: .txt document given the coordinates where x is the number of hexas checked and y is the number of valid combos in critical area
     """
     print()
 
-def generateCombos(hexasNum):
+def GenerateCombos(hexasNum):
     """INPUTS:
     hexasNum: The number of hexas being examined (e.g. if hexasnum = 3, then 5,7, and 11 are being examined)
     OUTPUTS: Combines functionality of findInvalidChains() and viewChains()
     """
     print()
 
-def validNumApproximation():
+def ValidNumApproximation():
     """INPUTS: none
     ~ Uses the CHECK_LIMIT number defined in main(), i.e. the default number of hexas
     OUTPUTS: Calculates an approximated for the expected number of valid combos within the domain (i.e. [1, A] where A is the upper bound of
    the critical area), counts the true number of valid combos within the domain, and displays the error between them
     """
-    print
+    print()
