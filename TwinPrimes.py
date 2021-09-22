@@ -77,11 +77,10 @@ def FindInvalidChains(n):
                     invalidStart = i + 1 - maxInvalid
             else:
                 invalidLength = 0
-
-		#Visual output
-		print("Start of max chain: " + str(invalidStart) + '\n'
-			+ "Max length chain: " + str(maxInvalid) + '\n'
-			+ "Critical Zone size: " + str((squareSextandsList[n - 1] - squareSextandsList[n - 2])))
+	#Visual output
+    print("Start of max chain: " + str(invalidStart) + '\n'+ 
+    "Max length chain: " + str(maxInvalid) + '\n' + 
+    "Critical Zone size: " + str((squareSextandsList[n - 1] - squareSextandsList[n - 2])))
 
 def ViewChains(hexasNum, length, start):
     """INPUT:hexasNum: The number of hexas checked (must be less than the number of hexas generated)
