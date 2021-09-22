@@ -1,3 +1,12 @@
 language: python
+addons:
+  sonarcloud:
+    organization: "twinprimes" # the key of the org you chose at step #3
+before_install:
+  - pip install -U pip
+  - pip install -U pytest
+  - pip install coverage
 script:
-  - pytest
+  - coverage run -m pytest TwinPrimes.py test_TwinPrimes.py
+  - coverage xml
+  - sonar-scanner
