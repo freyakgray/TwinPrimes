@@ -162,4 +162,4 @@ def validNumApproximation():
     OUTPUTS: Calculates an approximated for the expected number of valid combos within the domain (i.e. [1, A] where A is the upper bound of
    the critical area), counts the true number of valid combos within the domain, and displays the error between them
     """
-    print
+    print()
