@@ -38,15 +38,15 @@ def GenerateHexas(n):
     """INPUT: n: the number of hexas to be examined during the run of the program
     OUTPUT: An int array containing the first n positive hexas, as well as an array of the first n sextands
     NOTES: May be better implemented as a simple startup procedure within main()"""
-    for i in n
+    for i in n:
         sextandsList[i] = i + 1
         hexasList[i] = 6 * (sextandsList[i]) - 1
         squareSextandsList[i] = 6 * (sextandsList[i] * sextandsList[i]) - (2 * sextandsList[i])
-        if i + 1 <= n
+        if i + 1 <= n:
             sextandsList[i + 1] = i + 1
-            hexasList[i + 1] = 6 * (sextands[i]) + 1
+            hexasList[i + 1] = 6 * (sextandsList[i]) + 1
             squareSextandsList[i + 1] = 6 * (sextandsList[i + 1] * sextandsList[i + 1]) + (2 * sextandsList[i + 1])
-        i++ # Need to skip every other index
+        i+=1 # Need to skip every other index
         
 def FindInvalidChains(n):
     """INPUT: n: the number of hexas to be examined during the run of the program
@@ -78,10 +78,10 @@ def FindInvalidChains(n):
             else:
                 invalidLength = 0
 
-		 #Visual output
-		print("Start of max chain: " + invalidStart + '\n'
-			+ "Max length chain: " + maxInvalid + '\n'
-			+ "Critical Zone size: " + (squareSextandsList[n - 1] - squareSextandsList[n - 2]))
+		#Visual output
+		print("Start of max chain: " + str(invalidStart) + '\n'
+			+ "Max length chain: " + str(maxInvalid) + '\n'
+			+ "Critical Zone size: " + str((squareSextandsList[n - 1] - squareSextandsList[n - 2])))
 
 def ViewChains(hexasNum, length, start):
     """INPUT:hexasNum: The number of hexas checked (must be less than the number of hexas generated)
@@ -99,7 +99,7 @@ def ViewCritArea(n):
     print()
 
 
-def ViewCombos(hexasNum, lenght, start):
+def ViewCombos(hexasNum, length, start):
     """INPUT:hexasNum: The number of hexas checked (must be less than the number of hexas generated)
     length: The number of index combinations to be displayed
     start: The starting index of the chain to be displayed
@@ -128,7 +128,7 @@ def ViewCritCombos():
     """INPUTS: none
     OUTPUTS: displays the combos in the critical area
     NOTES: Can use viewCombos() or viewChains() """
-    viewCombos(CHECK_LIMIT, (squareSextandsList[CHECK_LIMIT-1]- squareSextandsList[CHECK_LIMIT- 2] + 1), squareSextandsList[CHECK_LIMIT - 2])
+    ViewCombos(CHECK_LIMIT, (squareSextandsList[CHECK_LIMIT-1]- squareSextandsList[CHECK_LIMIT- 2] + 1), squareSextandsList[CHECK_LIMIT - 2])
 
 def FindAverageGap():
     """INPUTS: none
