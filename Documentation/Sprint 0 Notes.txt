@@ -1,0 +1,37 @@
+>> POWERPOINT NOTES <<
+> Software development
+ ~ Approach: democratized version of Scrum; some roles are more solidly define, but we generally decide as a team
+ ~ Definition of done: All functions from the prototype implemented and working successfully
+ ~ Deliverables: ProjectAPI.txt
+ ~ Management: Trello
+
+> Communication
+ ~ Standups: Freya does in-class standups, Lucas and Robbie do remote standups
+ ~ Asynchronous: Discord for asynchronous communication, plus team meetings after every class and occasional
+   team meetings outside of class
+
+> Team Roles
+ ~ Product Owner/customer - Robbie
+ ~ Scrum lead is democratized; we make decisions as a group
+ ~ All members will be developers
+ ~ No rotation (can simply not mention rotation)
+
+> Toolchain
+ ~ Repository and approach: GitHub and ???
+ ~ CI/CD: Travis
+ ~ Deployment: local .exe file or online app as a stretch goal
+
+> Plan
+ ~ Minimum viable product: Prototype functions redesigned and implemented
+ ~ Stretch goals:
+  - GUI
+  - Make it a web-based app
+  - Design and implementation of pattern searching technique
+
+> Artifacts
+ ~ Planning meeting: ProjectAPI.txt, any notes you may have taken on the theory
+ ~ Retrospective (what exactly do we need for this?)
+ ~ Project management platform: Screenshots/links to Trello
+ ~ Repo statistics: Screenshots/links to GitHub repository (going to be small, since it's mostly
+   documentation so far)
+ ~ CI/CD and static analysis pipeline: ???
