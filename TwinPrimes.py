@@ -129,7 +129,7 @@ def ViewCritCombos(hexasChecked):
     """INPUT: hexasChecked: The number of hexas to be checked 
     OUTPUTS: displays the combos in the critical area
     NOTES: Can use viewCombos() or viewChains() """
-    ViewCombos(hexasChecked, (squareSextandsList[hexasChecked-1]- squareSextandsList[hexasChecked- 2] + 1), squareSextandsList[hexasChecked - 2])
+    ViewCombos(hexasChecked, (squareSextandsList[hexasChecked-1]- squareSextandsList[hexasChecked- 2] + 1), squareSextandsList[hexasChecked - 2], hexasChecked)
 
 def FindAverageGap(hexasChecked):
     """INPUTS: hexasChecked: The number of hexas to be checked 
