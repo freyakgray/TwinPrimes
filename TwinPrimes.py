@@ -9,7 +9,7 @@ def GenerateHexas(n):
     """INPUT: n: the number of hexas to be examined during the run of the program
     OUTPUT: An int array containing the first n positive hexas, as well as an array of the first n sextands
     NOTES: May be better implemented as a simple startup procedure within main()"""
-    for i in n:
+    for i in range(n):
         sextandsList[i] = i + 1
         hexasList[i] = 6 * (sextandsList[i]) - 1
         squareSextandsList[i] = 6 * (sextandsList[i] * sextandsList[i]) - (2 * sextandsList[i])
@@ -30,9 +30,9 @@ def FindInvalidChains(n):
     maxInvalid = 0
     valid = True
     
-    for i in n:
+    for i in range(n):
         hexorial *= hexasList[i]	
-    for i in ((hexorial - 1) / 2):# Only need half the hexorial because validity is mirrored
+    for i in range((hexorial - 1) / 2):# Only need half the hexorial because validity is mirrored
         valid = True
 		# check  if the index is valid With Respect To (WRT) each hexa checked
 		# NOTE: Take advantage of sextand-modulo reduction (only need to check sextand modulo h)
