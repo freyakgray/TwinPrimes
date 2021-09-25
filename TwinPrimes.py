@@ -69,7 +69,7 @@ def ViewChains(hexasNum, length, start):
     # Display the combos ranging from start to start + length
     for i in range(start, start + legnth + 1):
         valid = true # Checks if the index is valid
-	combo = i + ": "
+        combo = i + ": "
     for j in hexasNum:
         if(i % hexasList[j] == sexandsList[j] or i % hexas[j] == hexasList[j] - sextandsList[j]):
             valid = false
