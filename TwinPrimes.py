@@ -38,7 +38,7 @@ def GenerateHexas(n):
     """INPUT: n: the number of hexas to be examined during the run of the program
     OUTPUT: An int array containing the first n positive hexas, as well as an array of the first n sextands
     NOTES: May be better implemented as a simple startup procedure within main()"""
-    for i in n:
+    for i in range(n):
         sextandsList[i] = i + 1
         hexasList[i] = 6 * (sextandsList[i]) - 1
         squareSextandsList[i] = 6 * (sextandsList[i] * sextandsList[i]) - (2 * sextandsList[i])
