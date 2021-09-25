@@ -59,9 +59,9 @@ def FindInvalidChains(n):
     maxInvalid = 0
     valid = True
     
-    for i in n:
+    for i in range(n):
         hexorial *= hexasList[i]	
-    for i in ((hexorial - 1) / 2):# Only need half the hexorial because validity is mirrored
+    for i in range((hexorial - 1) / 2):# Only need half the hexorial because validity is mirrored
         valid = True
 		# check  if the index is valid With Respect To (WRT) each hexa checked
 		# NOTE: Take advantage of sextand-modulo reduction (only need to check sextand modulo h)
