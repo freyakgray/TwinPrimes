@@ -60,32 +60,31 @@ def ViewChains(hexasNum, length, start):
     OUTPUT: Displays the combos for the indices starting at start and ending at start + length; also marks valid combos 
     NOTES: Want to implement a check to make sure hexasNum < generated hexas; may also want to change name for clarity
     """
-    if hexasNum >= len(hexasList)
-	hexasNum = len(hexasList) - 1
-    combo = ""
-    valid = false
+    if hexasNum >= len(hexasList):
+        hexasNum = len(hexasList) - 1
+        combo = ""
+        valid = false
     print("Hexas checked: " + str(hexasNum) + '\n')
 
     # Display the combos ranging from start to start + length
     for i in range(start, start + legnth + 1):
-        valid = true // Checks if the index is valid
-	combo = i + ": ";
-	for j in hexasNum:
-	    if(i % hexasList[j] == sexandsList[j] or i % hexas[j] == hexasList[j] - sextandsList[j])
-	        valid = false
-	    combo += i % hexas[j] + " " # Update the string containing the combo for this index
-	
-	if valid
-	    combo += " <" # Displays a marker for valid combos
+        valid = true # Checks if the index is valid
+	combo = i + ": "
+    for j in hexasNum:
+        if(i % hexasList[j] == sexandsList[j] or i % hexas[j] == hexasList[j] - sextandsList[j]):
+            valid = false
+            combo += i % hexas[j] + " " # Update the string containing the combo for this index
+    if valid:
+        combo += " <" # Displays a marker for valid combos
 
 	print(combo)
 
 def ViewCritArea(hexasNum):
     """INPUT: hexasNum: The number of hexas being analyzed.
     OUTPUT: Displays all combinations in the critical area for the given set of hexas, and displays their validity"""
-    if hexasNum >= len(hexasList)
-	hexasNum = len(hexasList) - 1
-    viewChains(hexasNum, squareSextandsList[hexasNum - 1], 0)
+    if hexasNum >= len(hexasList):
+        hexasNum = len(hexasList) - 1
+        viewChains(hexasNum, squareSextandsList[hexasNum - 1], 0)
 
 
 def ViewCombos(hexasNum, length, start, hexasChecked):
