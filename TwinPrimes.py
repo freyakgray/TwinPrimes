@@ -76,8 +76,7 @@ def ViewChains(hexasNum, length, start):
             combo += i % hexas[j] + " " # Update the string containing the combo for this index
     if valid:
         combo += " <" # Displays a marker for valid combos
-
-	print(combo)
+    print(combo)
 
 def ViewCritArea(hexasNum):
     """INPUT: hexasNum: The number of hexas being analyzed.
