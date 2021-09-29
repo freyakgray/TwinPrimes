@@ -130,7 +130,7 @@ def FindAverageGap(hexasChecked):
         gap *= hexasList[i]/(hexasList[i]-2)
     print(str(num) + " / " + str(denom) + "\n" + str(gap))
 	
-def validCoordinates(hexasNum):
+def ValidCoordinates(hexasNum):
     """INPUTS:
     hexasNum: The number of hexas being examined
     OUTPUT: .txt document given the coordinates where x is the number of hexas checked and y is the number of valid combos in critical area
@@ -157,7 +157,7 @@ def validCoordinates(hexasNum):
     combo += validNum + ")"
     print(str(combo))
 
-def generateCombos(hexasNum):
+def GenerateCombos(hexasNum):
     """INPUTS:
     hexasNum: The number of hexas being examined (e.g. if hexasnum = 3, then 5,7, and 11 are being examined)
     OUTPUTS: Combines functionality of findInvalidChains() and viewChains()
@@ -212,7 +212,7 @@ def generateCombos(hexasNum):
 						  + "Average gap between valid combos: " + str((chainLengthSum / chainsNum)) + '\n'
 						  + "Max chain start: " + str(invalidStart))
 
-def validNumApproximation():
+def ValidNumApproximation():
     """INPUTS: none
     ~ Uses the CHECK_LIMIT number defined in main(), i.e. the default number of hexas
     OUTPUTS: Calculates an approximated for the expected number of valid combos within the domain (i.e. [1, A] where A is the upper bound of
