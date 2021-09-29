@@ -10,13 +10,13 @@ def GenerateHexas(n):
     OUTPUT: An int array containing the first n positive hexas, as well as an array of the first n sextands
     NOTES: May be better implemented as a simple startup procedure within main()"""
     for i in range(n):
-        sextandsList[i] = i + 1
-        hexasList[i] = 6 * (sextandsList[i]) - 1
-        squareSextandsList[i] = 6 * (sextandsList[i] * sextandsList[i]) - (2 * sextandsList[i])
+        sextandsList.insert(i, i + 1)
+        hexasList.insert(i, 6 * (sextandsList[i]) - 1 )
+        squareSextandsList.insert(i, 6 * (sextandsList[i] * sextandsList[i]) - (2 * sextandsList[i])) 
         if i + 1 <= n:
-            sextandsList[i + 1] = i + 1
-            hexasList[i + 1] = 6 * (sextandsList[i]) + 1
-            squareSextandsList[i + 1] = 6 * (sextandsList[i + 1] * sextandsList[i + 1]) + (2 * sextandsList[i + 1])
+            sextandsList.insert(i + 1, i + 1)
+            hexasList.insert(i+1, 6 * (sextandsList[i]) + 1)
+            squareSextandsList.insert(i+1, 6 * (sextandsList[i + 1] * sextandsList[i + 1]) + (2 * sextandsList[i + 1]))
         i+=1 # Need to skip every other index
         
 def FindInvalidChains(n):
