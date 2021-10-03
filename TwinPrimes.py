@@ -1,5 +1,5 @@
 """This is an analytical tool for gathering data about a particular set of integers, dubbed "hexadjacents", or "hexas"
-Contributors: Robbie Jordan, Freya Gray, Lucas Nieddu"""
+Contributors: Robbie Jordan, Freya Gray, Lucas Nieddu, Cory Gamble"""
 
 hexasList = []
 sextandsList = []
@@ -8,16 +8,24 @@ squareSextandsList = []
 def GenerateHexas(n):
     """INPUT: n: the number of hexas to be examined during the run of the program
     OUTPUT: An int array containing the first n positive hexas, as well as an array of the first n sextands
-    NOTES: May be better implemented as a simple startup procedure within main()"""
+    """
     for i in range(n):
-        sextandsList.insert(i, i + 1)
-        hexasList.insert(i, 6 * (sextandsList[i]) - 1 )
-        squareSextandsList.insert(i, 6 * (sextandsList[i] * sextandsList[i]) - (2 * sextandsList[i])) 
-        if i + 1 <= n:
-            sextandsList.insert(i + 1, i + 1)
-            hexasList.insert(i+1, 6 * (sextandsList[i]) + 1)
-            squareSextandsList.insert(i+1, 6 * (sextandsList[i + 1] * sextandsList[i + 1]) + (2 * sextandsList[i + 1]))
-        i+=1 # Need to skip every other index
+        currentHexa = int(3*(i + 1) + (3/2) - ((-1)**(i + 1) * (1/2)))
+        hexasList.insert(i, currentHexa)
+        sextand1 = (currentHexa - 1) / 6
+        sextand2 = (currentHexa + 1) / 6
+        if sextand1 % 1 == 0:
+            sextandsList.append(int(sextand1))
+        else:
+            sextandsList.append(int(sextand2))
+
+def is_hexa(n):
+    """INPUT: n: the hexa to check
+    OUTPUT: Boolean indicating if n is a valid hexa
+    """
+    if n > 3 and n % 2 != 0 and n % 3 != 0:
+        return True
+    return False 
         
 def FindInvalidChains(n):
     """INPUT: n: the number of hexas to be examined during the run of the program
