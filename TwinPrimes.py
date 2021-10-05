@@ -19,7 +19,7 @@ def GenerateHexas(n):
         currentSextand = int(((1/2) * (i+1)) + (1/4) + ((1/4) * (-1)**((i+1) - 1)))
         sextandsList.insert(i, currentSextand)
         #if the hexa = 6s - 1 for some s, then its square-sextand is 6(s^2) - 2s, and if the hexa is 6s + 1 then its square-sextand is 6(s^2) + 2s
-        if ((currentHexa + 1) / 6) % 1 == 0:
+        if i % 2 == 0:
             squareSextand = 6*(currentSextand**2) - 2*currentSextand
             squareSextandsList.insert(i, int(squareSextand))
         else:
