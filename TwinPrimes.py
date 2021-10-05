@@ -143,26 +143,26 @@ def ValidCoordinates(hexasNum):
     OUTPUT: .txt document given the coordinates where x is the number of hexas checked and y is the number of valid combos in critical area
     """
     combo = ""
-    valid = False 
-    validNumber = 0
-
-    print("Hexas checked: " + str(hexasNum) + '\n')
-    i = 2
-    j = squareSextandsList[i-2]
-    k = 0
-    for i in hexasNum: # cycle through all hexa pairs
-        combo = "(" + i + ", "
+    validNum = 0
+    print("Hexas checked: " + str(hexasNum) + "\n")
+    for i in range(2, hexasNum + 1): # Cycle through all hexa pairs
+        combo = "(" + str(i) + ","
+        # print(combo)
         validNum = 0
-        for j in squareSextandsList[i-1]: # cycle through critical area
+
+        for j in range(int(squareSextandsList[i-2]), int(squareSextandsList[i-1] + 1)):
             valid = True
-            for k in i: # check modulos of all hexas for a given sextand
-                if (j % hexasList[k] ==  sextandsList[k] or  j % hexasList[k] == hexasList[k] - sextandsList[k]):
-                    valid = False 
-                
+            for k in range(i):
+                result1 = ((6 * j) % hexasList[k] == 1)
+                result2 = (6 * j) % hexasList[k] == hexasList[k] - 1
+                if(result1 or result2):
+                    valid = False
+
             if(valid):
-                validNum+=1
-    combo += validNum + ")"
-    print(str(combo))
+                validNum += 1
+
+        combo += str(validNum) + ")"
+        print(combo)
 
 def GenerateCombos(hexasNum):
     """INPUTS:
