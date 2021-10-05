@@ -1,24 +1,31 @@
 """This is an analytical tool for gathering data about a particular set of integers, dubbed "hexadjacents", or "hexas"
-Contributors: Robbie Jordan, Freya Gray, Lucas Nieddu"""
+Contributors: Robbie Jordan, Freya Gray, Lucas Nieddu, Cory Gamble"""
 
 hexasList = []
 sextandsList = []
 squareSextandsList = []
 
 def GenerateHexas(n):
-    """INPUT: n: the number of hexas to be examined during the run of the program
-    OUTPUT: An int array containing the first n positive hexas, as well as an array of the first n sextands
-    NOTES: May be better implemented as a simple startup procedure within main()"""
+    """INPUT: 
+    n: the number of hexas to be examined during the run of the program
+    OUTPUT: 
+    hexasList: the list of hexas
+    sextandsList: the list of related sextands
+    squareSextandsList: the list of related square sextands
+    """
     for i in range(n):
-        sextandsList[i] = i + 1
-        hexasList[i] = 6 * (sextandsList[i]) - 1
-        squareSextandsList[i] = 6 * (sextandsList[i] * sextandsList[i]) - (2 * sextandsList[i])
-        if i + 1 <= n:
-            sextandsList[i + 1] = i + 1
-            hexasList[i + 1] = 6 * (sextandsList[i]) + 1
-            squareSextandsList[i + 1] = 6 * (sextandsList[i + 1] * sextandsList[i + 1]) + (2 * sextandsList[i + 1])
-        i+=1 # Need to skip every other index
-        
+        currentHexa = int(3*(i + 1) + (3/2) - ((-1)**(i + 1) * (1/2)))
+        hexasList.insert(i, currentHexa)
+        currentSextand = int(((1/2) * (i+1)) + (1/4) + ((1/4) * (-1)**((i+1) - 1)))
+        sextandsList.insert(i, currentSextand)
+        #if the hexa = 6s - 1 for some s, then its square-sextand is 6(s^2) - 2s, and if the hexa is 6s + 1 then its square-sextand is 6(s^2) + 2s
+        if i % 2 == 0:
+            squareSextand = 6*(currentSextand**2) - 2*currentSextand
+            squareSextandsList.insert(i, int(squareSextand))
+        else:
+            squareSextand = 6*(currentSextand**2) + 2*currentSextand
+            squareSextandsList.insert(i, int(squareSextand))
+    
 def FindInvalidChains(n):
     """INPUT: n: the number of hexas to be examined during the run of the program
     OUTPUT: Determines the longest chain of consecutive invalid indices. Prints out the starting index of this chain and its length"""
