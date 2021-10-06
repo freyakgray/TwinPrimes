@@ -1,6 +1,9 @@
 import TwinPrimes as tp
 
 def test_GenerateHexas():
+    tp.hexasList.clear()
+    tp.sextandsList.clear()
+    tp.squareSextandsList.clear()
     tp.GenerateHexas(25)
     assert tp.hexasList == [5, 7, 11, 13, 17, 19, 23, 25, 29, 31, 35, 37, 41, 43, 
     47, 49, 53, 55, 59, 61, 65, 67, 71, 73, 77]

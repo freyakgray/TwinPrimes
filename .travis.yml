@@ -7,6 +7,6 @@ before_install:
   - pip install -U pytest
   - pip install coverage
 script:
-  - coverage run -m pytest TwinPrimes.py test_TwinPrimes.py
+  - coverage run -m pytest TwinPrimes.py Tests
   - coverage xml
   - sonar-scanner

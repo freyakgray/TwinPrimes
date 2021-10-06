@@ -126,16 +126,23 @@ def ViewCritCombos(hexasChecked):
     ViewCombos(hexasChecked, (squareSextandsList[hexasChecked-1]- squareSextandsList[hexasChecked- 2] + 1), squareSextandsList[hexasChecked - 2], hexasChecked)
 
 def FindAverageGap(hexasChecked):
-    """INPUTS: hexasChecked: The number of hexas to be checked 
-    OUTPUTS: Displays the expected average gap between valid combos (hexorial / Lexorial)
+    """INPUTS: 
+    hexasChecked: The number of hexas to be checked 
+    OUTPUTS: 
+    Displays the expected average gap between valid combos (hexorial / Lexorial)
+    Returns:
+    num: Hexorial of n hexas
+    denom: Lexorial of n hexas
+    gap: average of hexorial/lexorial
     NOTES: May want to take an input and find the average gap in that range (e.g. if n = 2, find the average gap in [0, (5*7)) range
     """
     gap, num, denom = 1,1,1
     for i in range(0,hexasChecked):
         num *= hexasList[i]
         denom *= hexasList[i]-2
-        gap *= hexasList[i]/(hexasList[i]-2)
+    gap = num/denom
     print(str(num) + " / " + str(denom) + "\n" + str(gap))
+    return num, denom, gap
 	
 def ValidCoordinates(hexasNum):
     """INPUTS:
