@@ -316,3 +316,4 @@ def view_chains(hexas_num, start, length):
         if valid:
             combo += " <"
         print(combo)
+        
