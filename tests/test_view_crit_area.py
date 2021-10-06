@@ -12,7 +12,3 @@ class TestCritArea(unittest.TestCase):
         self.assertEqual(limit, 77)
         self.assertEqual(((subtend ** 2 - 1) / 6) % 1, 0)
         self.assertEqual(((limit ** 2 - 1) / 6) % 1, 0)
-
-
-
-
