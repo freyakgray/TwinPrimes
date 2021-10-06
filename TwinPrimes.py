@@ -145,6 +145,12 @@ def ValidCoordinates(hexasNum):
     combo = ""
     validNum = 0
     print("Hexas checked: " + str(hexasNum) + "\n")
+    file_name = "valid_coordinates.txt"
+    
+    if os.path.exists(file_name):
+        print("File exists, removing file and creating a new: ", file_name)
+        os.remove(file_name)
+
     for i in range(2, hexasNum + 1): # Cycle through all hexa pairs
         combo = "(" + str(i) + ","
         # print(combo)
@@ -162,7 +168,8 @@ def ValidCoordinates(hexasNum):
                 validNum += 1
 
         combo += str(validNum) + ")"
-        print(combo)
+        with open("valid_coordinates.txt", "a") as file:
+            file.write(combo + '\n')
 
 def GenerateCombos(hexasNum):
     """INPUTS:
