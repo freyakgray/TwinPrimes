@@ -281,3 +281,38 @@ def ValidNumApproximation():
     print("Aproximate combos: " + str(prodApprox))
     print("Number of valid combos: " + str(prodTrue))
     print("Error: " + str(((prodTrue - prodApprox) / prodTrue) * 100 + "%"))
+
+
+def view_crit_area():
+    length = len(hexasList) - 1
+    limit = hexasList[length]
+    subtend = hexasList[length - 1]
+    start = (subtend ** 2 - 1) / 6
+    end = (limit ** 2 - 1) / 6
+    print("*** critical area ***")
+    print("start:", int(start))
+    print("end:", int(end))
+
+
+# TODO: needs fixing
+def view_chains(hexas_num, start, length):
+    """hexasNum: The number of hexas checked (must be less than the number of hexas generated)
+    length: The number of index combinations to be displayed
+    start: The starting index of the chain to be displayed
+    OUTPUT: Displays the combos for the indices starting at start and ending at start + length; also marks valid combos 
+    NOTES: Want to implement a check to make sure hexasNum < generated hexas; may also want to change name for cllarity
+    """
+    combo = ""
+    valid = False
+    print("hexas checked:", hexas_num)
+    for i in range(start, start + length + 1):
+        valid = True
+        combo = str(i) + ": "
+        for j in range(hexas_num):
+            if (6 * i) % hexasList[j] == 1 or \
+                (6 * i) % hexasList[j] == hexasList[j] - 1:
+                valid = False
+        combo += str((6 * i) % hexasList[j]) + " "
+        if valid:
+            combo += " <"
+        print(combo)
