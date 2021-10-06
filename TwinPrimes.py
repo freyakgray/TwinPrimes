@@ -284,6 +284,10 @@ def ValidNumApproximation():
 
 
 def view_crit_area():
+    """
+    OUTPUT: 
+    Displays the start and end indices of the critical area being examined
+    """
     length = len(hexasList) - 1
     limit = hexasList[length]
     subtend = hexasList[length - 1]
