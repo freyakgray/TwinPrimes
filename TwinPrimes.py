@@ -1,6 +1,9 @@
 """This is an analytical tool for gathering data about a particular set of integers, dubbed "hexadjacents", or "hexas"
 Contributors: Robbie Jordan, Freya Gray, Lucas Nieddu, Cory Gamble"""
 
+# imports 
+import os
+
 hexasList = []
 sextandsList = []
 squareSextandsList = []
