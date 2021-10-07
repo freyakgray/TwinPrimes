@@ -154,14 +154,14 @@ def ValidCoordinates(hexasNum):
     """
     combo = ""
     validNum = 0
-    print("Hexas checked: " + str(hexasNum) + "\n")
+    hexas_checked = "Hexas checked: " + str(hexasNum) + "\n"
     file_name = "valid_coordinates.txt"
     
     if os.path.exists(file_name):
         os.remove(file_name)
-
+    
     with open(file_name, "w") as file:
-	file.write(hexas_checked)
+        file.write(hexas_checked)
 
     for i in range(2, hexasNum + 1): # Cycle through all hexa pairs
         combo = "(" + str(i) + ","
