@@ -1,6 +1,9 @@
 """This is an analytical tool for gathering data about a particular set of integers, dubbed "hexadjacents", or "hexas"
 Contributors: Robbie Jordan, Freya Gray, Lucas Nieddu, Cory Gamble"""
 
+#imports
+import os
+
 hexasList = []
 sextandsList = []
 squareSextandsList = []
@@ -155,8 +158,10 @@ def ValidCoordinates(hexasNum):
     file_name = "valid_coordinates.txt"
     
     if os.path.exists(file_name):
-        print("File exists, removing file and creating a new: ", file_name)
         os.remove(file_name)
+
+    with open(file_name, "w") as file:
+	file.write(hexas_checked)
 
     for i in range(2, hexasNum + 1): # Cycle through all hexa pairs
         combo = "(" + str(i) + ","
