@@ -6,7 +6,7 @@ def test_ValidCoordinates():
     hexasNum = 10
     # Populate hexasList and squareSextandsList
     sxtnd = 0
-    for i in range(tp.ARR):
+    for i in range(5000):
         if((i + 1) % 2 == 1):
             tp.hexasList.append((3 * (i + 2)) - 1)
             sxtnd += 1
