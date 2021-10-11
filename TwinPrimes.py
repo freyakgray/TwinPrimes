@@ -16,6 +16,7 @@ def GenerateHexas(n):
     sextandsList: the list of related sextands
     squareSextandsList: the list of related square sextands
     """
+    assert n >= 1
     for i in range(n):
         currentHexa = int(3*(i + 1) + (3/2) - ((-1)**(i + 1) * (1/2)))
         hexasList.insert(i, currentHexa)
@@ -63,70 +64,61 @@ def FindInvalidChains(n):
     "Max length chain: " + str(maxInvalid) + '\n' + 
     "Critical Zone size: " + str((squareSextandsList[n - 1] - squareSextandsList[n - 2])))
 
-def ViewChains(hexasNum, length, start):
-    """INPUT:hexasNum: The number of hexas checked (must be less than the number of hexas generated)
-    length: The number of index combinations to be displayed
-    start: The starting index of the chain to be displayed
-    OUTPUT: Displays the combos for the indices starting at start and ending at start + length; also marks valid combos 
-    NOTES: Want to implement a check to make sure hexasNum < generated hexas; may also want to change name for clarity
+def GenerateCombo(hexasChecked, index):
     """
-    if hexasNum >= len(hexasList):
-        hexasNum = len(hexasList) - 1
-        combo = ""
-        valid = false
-    print("Hexas checked: " + str(hexasNum) + '\n')
-
-    # Display the combos ranging from start to start + length
-    for i in range(start, start + legnth + 1):
-        valid = true # Checks if the index is valid
-        combo = i + ": "
-    for j in hexasNum:
-        if(i % hexasList[j] == sexandsList[j] or i % hexas[j] == hexasList[j] - sextandsList[j]):
-            valid = false
-            combo += i % hexas[j] + " " # Update the string containing the combo for this index
-    if valid:
-        combo += " <" # Displays a marker for valid combos
-    print(combo)
-
-def ViewCritArea(hexasNum):
-    """INPUT: hexasNum: The number of hexas being analyzed.
-    OUTPUT: Displays all combinations in the critical area for the given set of hexas, and displays their validity"""
-    if hexasNum >= len(hexasList):
-        hexasNum = len(hexasList) - 1
-        viewChains(hexasNum, squareSextandsList[hexasNum - 1], 0)
-
-
-def ViewCombos(hexasNum, length, start, hexasChecked):
-    """INPUT:hexasNum: The number of hexas checked (must be less than the number of hexas generated)
-    length: The number of index combinations to be displayed
-    start: The starting index of the chain to be displayed
-    hexasChecked: The number of hexas to be checked 
-    OUTPUT: Displays the combos for the indices starting at start and ending at start + length; also marks valid combos 
-    NOTES: Want to implement a check to make sure hexasNum < generated hexas; may also want to change name for clarity
-   
-    NOTES: Same input/output as viewChains, except the latter allows custom hexa inputs
-    ~ May want to deprecate this """
-    combo = ""
+    INPUT: 
+    hexasChecked: The number of hexas checked (must be less than the number of hexas generated)
+    index: index to check combo
+    RETURNS:
+    combo: a string with the combos for a certain index, < denotes the combo is valid
+    """
+    assert hexasChecked < len(hexasList)
+    assert hexasChecked >= 1
+    assert index >= 0
     valid = True
+    combo = ""
+    for i in range(hexasChecked):
+        combo += str(index % hexasList[i]) + " "
+        if (index % hexasList[i] == 1) or (index % hexasList[i] == hexasList[i] - 1):
+            valid = False
+    if(valid):
+        combo += "< "
+    return combo
+        
+def ViewCombo(hexasChecked, start, length):
+    """INPUT:
+    hexasChecked: The number of hexas checked (must be less than the number of hexas generated)
+    start: The starting index of the chain to be displayed
+    length: The number of index combinations to be displayed
+    OUTPUT: 
+    Displays the combos for the indices starting at start and ending at start + length; also marks valid combos 
+    Returns: 
+    combosList: list of combos
+    """
+    assert hexasChecked < len(hexasList)
+    assert start >= 0
+    assert hexasChecked,length >= 1
+    combosList = []
     end = start + length
     print("Hexas checked: " + str(hexasChecked) + "\n")
     for i in range(start,end):
         combo = str(i) + ": "
-        valid = True
-        for j in range(0, hexasNum):
-            combo += str(i % hexasList[j]) + " "
-            #check for invalid moduli
-            if i % hexasList[j] == 1 or i % hexasList[j] == hexasList[j] - 1:
-                valid = False 
-    if(valid):
-        combo += "< "
-    print(combo)
+        combo += GenerateCombo(hexasChecked, i)
+        combosList.insert(i, combo)
+        print(combo + "\n")
+    return combosList
 
 def ViewCritCombos(hexasChecked):
-    """INPUT: hexasChecked: The number of hexas to be checked 
-    OUTPUTS: displays the combos in the critical area
-    NOTES: Can use viewCombos() or viewChains() """
-    ViewCombos(hexasChecked, (squareSextandsList[hexasChecked-1]- squareSextandsList[hexasChecked- 2] + 1), squareSextandsList[hexasChecked - 2], hexasChecked)
+    """INPUT: 
+    hexasChecked: The number of hexas to be checked 
+    OUTPUTS: 
+    displays the combos in the critical area
+    RETURNS:
+    combosList: list of combos
+    """
+    assert hexasChecked < len(hexasList)
+    combosList = ViewCombo(hexasChecked, 0, squareSextandsList[hexasChecked - 1] + 1)
+    return combosList
 
 def FindAverageGap(hexasChecked):
     """INPUTS: 
@@ -288,7 +280,7 @@ def ValidNumApproximation():
     print("Error: " + str(((prodTrue - prodApprox) / prodTrue) * 100 + "%"))
 
 
-def view_crit_area():
+def ViewCritArea():
     """
     OUTPUT: 
     Displays the start and end indices of the critical area being examined
@@ -301,28 +293,3 @@ def view_crit_area():
     print("*** critical area ***")
     print("start:", int(start))
     print("end:", int(end))
-
-
-# TODO: needs fixing
-def view_chains(hexas_num, start, length):
-    """hexasNum: The number of hexas checked (must be less than the number of hexas generated)
-    length: The number of index combinations to be displayed
-    start: The starting index of the chain to be displayed
-    OUTPUT: Displays the combos for the indices starting at start and ending at start + length; also marks valid combos 
-    NOTES: Want to implement a check to make sure hexasNum < generated hexas; may also want to change name for cllarity
-    """
-    combo = ""
-    valid = False
-    print("hexas checked:", hexas_num)
-    for i in range(start, start + length + 1):
-        valid = True
-        combo = str(i) + ": "
-        for j in range(hexas_num):
-            if (6 * i) % hexasList[j] == 1 or \
-                (6 * i) % hexasList[j] == hexasList[j] - 1:
-                valid = False
-        combo += str((6 * i) % hexasList[j]) + " "
-        if valid:
-            combo += " <"
-        print(combo)
-        
