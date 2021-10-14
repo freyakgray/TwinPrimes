@@ -174,61 +174,91 @@ def ValidCoordinates(hexasNum):
         combo += str(validNum) + ")"
         with open("valid_coordinates.txt", "a") as file:
             file.write(combo + '\n')
-
 def GenerateCombos(hexasNum):
     """INPUTS:
     hexasNum: The number of hexas being examined (e.g. if hexasnum = 3, then 5,7, and 11 are being examined)
     OUTPUTS: Combines functionality of findInvalidChains() and viewChains()
     """
-    adv = True
+    # boolean variables
+    adv = True 
     valid = True
-    combo = [hexasNum]
-    index = 1
-    invalidChainLength, maxChainLength, invalidStart = 0, 0, 0
-    chainLengthSum, chainsNum = 0, 0
 
-    while(adv):
+    # combo list initialized with size of hexasNum
+    combo = [[]] * hexasNum
+
+    # integer varaibles
+    index = 1
+    invalidChainLength = 0
+    maxChainLength = 0
+    invalidStart = 0
+
+    # float variables 
+    chainLengthSum = 0.0
+    chainsNum = 0.0
+
+    # file name
+    file_name = "generate_combos.txt"
+    
+    if os.path.exists(file_name):
+        os.remove(file_name)
+
+    while (adv):
         adv = False
         valid = True
 
-        print(format.__format__(str(index)) + ":")
-        for i in range(len(combo)):
-            combo[i] = index % hexasList[i]
-
+        print_statement = str(str(index) + ": ")
+        for i in range(0 , len(combo)):
+            combo[i] = (index % hexasList[i])
+        
             if(combo[i] != 0):
                 adv = True
-
-            # need to be adjusted for the fact that indices start at 0
-            # search for invalid remainders
             
             if(i % 2 == 0):
-                if(combo[i] == ((i + 2) / 2) or combo[i] == hexasList[i] - ((i + 2) / 2)):
+                result1 = combo[i] == ((i + 2) / 2) 
+                result2 = combo[i] == hexasList[i] - ((i + 2) / 2)
+                if (result1) or (result2):
                     valid = False
 
+                
+                
             elif(i % 2 == 1):
-                if(combo[i] == ((i + 1) / 2) or combo[i] == hexasList[i] - ((i + 1) / 2)):
+                result3 = combo[i] == ((i + 1) / 2)
+                result4 = combo[i] == hexasList[i] - ((i + 1) / 2)
+                if (result3) or (result4):
                     valid = False
+            
+            print_statement += " "
+            print_statement += str(combo[i])
 
-            print(format.__format__(combo[i]))
         if(valid):
-            print("<")
+            print_statement += " <"
+
             chainLengthSum += invalidChainLength
             chainsNum+=1
-
             invalidChainLength = 0
-        else: # update chain length info
-            invalidChainLength+=1
+        else:
+            invalidChainLength +=1 
 
             if(invalidChainLength > maxChainLength):
                 maxChainLength = invalidChainLength
                 invalidStart = index - maxChainLength + 1
-        
-        print('\n')
-        index += 1
 
-        print("Max chain length: " + str(maxChainLength) + '\n'
-						  + "Average gap between valid combos: " + str((chainLengthSum / chainsNum)) + '\n'
-						  + "Max chain start: " + str(invalidStart))
+        with open("generate_combos.txt", "a" ) as file:
+            file.write(print_statement)
+            file.write("\n")
+        index+=1
+
+    # End while
+    ratio = (chainLengthSum / float(chainsNum))
+    with open(file_name, "a") as file:
+        file.write("Max chain length: ")
+        file.write(str(maxChainLength))
+        file.write("\n")
+        file.write("Average gap between valid combos: ")
+        file.write(str(ratio))
+        file.write("\n")
+        file.write("Max chain start: ")
+        file.write(str(invalidStart))
 
 def ValidNumApproximation():
     """INPUTS: none
