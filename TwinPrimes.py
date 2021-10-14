@@ -208,6 +208,7 @@ def GenerateCombos(hexasNum):
         valid = True
 
         print_statement = str(str(index) + ": ")
+        print(str(index), ":", end = " ")
         for i in range(0 , len(combo)):
             combo[i] = (index % hexasList[i])
         
@@ -230,9 +231,11 @@ def GenerateCombos(hexasNum):
             
             print_statement += " "
             print_statement += str(combo[i])
+            print(str(combo[i]), end = " ")
 
         if(valid):
             print_statement += " <"
+            print(" <", end = " ")
 
             chainLengthSum += invalidChainLength
             chainsNum+=1
@@ -247,6 +250,8 @@ def GenerateCombos(hexasNum):
         with open("generate_combos.txt", "a" ) as file:
             file.write(print_statement)
             file.write("\n")
+
+        print("\n")
         index+=1
 
     # End while
@@ -260,55 +265,85 @@ def GenerateCombos(hexasNum):
         file.write("\n")
         file.write("Max chain start: ")
         file.write(str(invalidStart))
-def ValidNumApproximation():
-    """INPUTS: none
-    ~ Uses the CHECK_LIMIT number defined in main(), i.e. the default number of hexas
+
+
+def ValidNumApproximation(hexasNum):
+    """INPUTS: hexasNum
     OUTPUTS: Calculates an approximated for the expected number of valid combos within the domain (i.e. [1, A] where A is the upper bound of
-   the critical area), counts the true number of valid combos within the domain, and displays the error between them
+   the critical area), counts the true number of valid combos within the domain, and displays the error between them. Outputs to a txt file named
+   valid_num_approx.txt as well as the console. 
     """
 
-    # Working to find true value; need even inputs for simplified estimate
-    endPoint = squareSextandsList[(len(hexasList) - 1) - 1] # Subtract one for array index
-    prodTrue = 0.0
-    prodApprox = 1.0 # marks which section of approximation being checked
+    '''
+        prodApprox is the approximated number of valid combos by taking quotient of the lesser hexorial and the true hexorial,
+		then multiplying that by the index, which in this case is the square-sextand of the greatest hexa being examined, i.e.
+		the upper boundary of the critical area
+
+        prodTrue is the actual number of valid combos counted within the range of [1, A], where A is the upper boundary of the
+		critical area
+    '''    
+
+    # integers
+    endPoint = int(squareSextandsList[hexasNum - 1])
     marker = 1
+
+    # floats
+    prodTrue = 0.0
+    prodApprox = 1.0
+
+    # boolean values
     validCombo = False
 
-    """
-         - prodApprox is the approximated number of valid combos by taking quotient of the lesser hexorial and the true hexorial,
-		    then multiplying that by the index, which in this case is the square-sextand of the greatest hexa being examined, i.e.
-		    the upper boundary of the critical area
+    # file name
+    file_name = "valid_num_approx.txt"
+    
+    if os.path.exists(file_name):
+        os.remove(file_name)
 
-		 - prodTrue is the actual number of valid combos counted within the range of [1, A], where A is the upper boundary of the
-		    critical area
-    """
-    i = 1
-    for i in endPoint:
+    for i in range(1, endPoint):
         validCombo = True
-        if (i > squareSextandsList[marker]):
+        if(i > squareSextandsList[marker]):
             marker += 2
-        for j in marker:
-            if(i % hexasList[j] == sextandsList[j] or i % hexasList[j] == (hexasList[j] - sextandsList[j])):
+
+        for j in range(0, marker):
+            result1 = i % hexasList[j] == sextandsList[j]
+            result2 = i % hexasList[j] == (hexasList[j] - sextandsList[j])
+            if (result1) or (result2):
                 validCombo = False
                 break
-
+        
         if(validCombo == True):
-            prodTrue += 1
-        # print("Valid at " + i)
-
-        # print((hexas[j] - 2) / hexas[j])
-        # print(prodTrue)
-    for j in range(len(hexasList) - 1):
-        prodApprox *= ((hexasList[j] - 2) / hexasList[j])
-        #print(hexas[j] - 2) / hexas[j]
-
-
+            prodTrue+=1
+            print_statement = "Valid at " + str(i)
+            print(print_statement)
+            with open(file_name, "a") as file:
+                file.write(print_statement)
+                file.write("\n")
+                
+    for j in range(0, hexasNum):
+        prodApprox *= ((float(hexasList[j] - 2)) / (float(hexasList[j])))
+    
     prodApprox *= endPoint
-    print("Checking to s = " + str(endPoint))
-    print("Aproximate combos: " + str(prodApprox))
-    print("Number of valid combos: " + str(prodTrue))
-    print("Error: " + str(((prodTrue - prodApprox) / prodTrue) * 100 + "%"))
+    error = (prodTrue - prodApprox) / float(prodTrue)
+    error_percentage = error * 100
 
+    with open(file_name, "a") as file:
+        file.write("Checking to s = ")
+        file.write(str(endPoint))
+        file.write("\n")
+        file.write("Approximate combos: ")
+        file.write(str(prodApprox))
+        file.write("\n")
+        file.write("Number of valid combos: ")
+        file.write(str(prodTrue))
+        file.write("\n")
+        file.write("Error: ")
+        file.write(str(error_percentage))
+        file.write("%")
+    print("Checking to s = ", str(endPoint))
+    print("Approximate combos: ", str(prodApprox))
+    print("Number of valid combos: ", str(prodTrue))
+    print("Error: ", str(error_percentage))
 
 def ViewCritArea():
     """
