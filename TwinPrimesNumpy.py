@@ -104,7 +104,7 @@ class NumpyTPC:
         """
 
     # TODO
-    def FindAverageGap(hexas_checked):
+    def FindAverageGap(self, hexas_checked):
         """INPUTS: 
         hexasChecked: The number of hexas to be checked 
         OUTPUTS: 
@@ -145,14 +145,14 @@ class NumpyTPC:
                 print(combo)
 
     # TODO
-    def GenerateCombos(hexas_num):
+    def GenerateCombos(self, hexas_num):
         """INPUTS:
         hexasNum: The number of hexas being examined (e.g. if hexasnum = 3, then 5,7, and 11 are being examined)
         OUTPUTS: Combines functionality of findInvalidChains() and viewChains()
         """
 
     # TODO
-    def ValidNumApproximation(hexas_num):
+    def ValidNumApproximation(self, hexas_num):
         """INPUTS: hexasNum
         OUTPUTS: Calculates an approximated for the expected number of valid combos within the domain (i.e. [1, A] where A is the upper bound of
         the critical area), counts the true number of valid combos within the domain, and displays the error between them. Outputs to a txt file named
@@ -160,7 +160,7 @@ class NumpyTPC:
         """
         
     # TODO
-    def ViewCritArea():
+    def ViewCritArea(self):
         """
         OUTPUT: 
         Displays the start and end indices of the critical area being examined
