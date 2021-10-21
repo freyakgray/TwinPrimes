@@ -7,20 +7,29 @@ from pympler.asizeof import asizeof
 
 
 class NumpyTPC:
-    def __init__(self, array_size, hexas_num):
-        self.array_size = array_size
+    def __init__(self, size, hexas_num):
+        self.size = size
         self.hexas_num = hexas_num
         
         # initialize empty numpy arrays 
-        self.hexas_array = np.empty(self.array_size)
-        self.sextands_array = np.empty(self.array_size)
-        self.square_sextands_array = np.empty(self.array_size)
+        self.hexas_array = np.empty(self.size)
+        self.sextands_array = np.empty(self.size)
+        self.square_sextands_array = np.empty(self.size)
+
+        # initialize lists
+        self.hexas_list = []
+        self.sextands_list = []
+        self.square_sextands_list = []
+
+        # file names
+        self.ARRAY_FILE_NAME = "valid_coordinates_array.txt"
+        self.LIST_FILE_NAME = "valid_coordinates_list.txt"
 
     def populate_arrays(self):
+        print("Populating arrays at size = ", self.size, " ....")
         # Populate hexas array and square_sextands_array
-        start_time = datetime.now()
         sxtnd = 0
-        for i in range(self.array_size):
+        for i in range(self.size):
             if((i + 1) % 2 == 1):
                 self.hexas_array[i] =  ((3 * (i + 2)) - 1)
                 sxtnd += 1
@@ -30,30 +39,21 @@ class NumpyTPC:
 
             self.square_sextands_array[i] =  (((self.hexas_array[i] * self.hexas_array[i]) - 1) / 6)
             self.sextands_array[i] =  sxtnd
-        end_time = datetime.now()
-        print('Time for numpy arrays to populate ---- > Duration: {}'.format(end_time - start_time))
-        print("%d bytes" % (self.hexas_array.size * self.hexas_array.itemsize))
 
     def populate_lists(self):
+        print("Populating lists at size = ", self.size, "....")
         # Populate hexasList and squareSextandsList
-        hexasList = [] 
-        squareSextandsList = [] 
-        sextandsList = [] 
-        start_time = datetime.now()
         sxtnd = 0
-        for i in range(self.array_size):
+        for i in range(self.size):
             if((i + 1) % 2 == 1):
-                hexasList.append((3 * (i + 2)) - 1)
+                self.hexas_list.append((3 * (i + 2)) - 1)
                 sxtnd += 1
                
             else:
-                hexasList.append((3 * (i + 1)) + 1)
+                self.hexas_list.append((3 * (i + 1)) + 1)
 
-            squareSextandsList.append(((hexasList[i] * hexasList[i]) - 1) / 6)
-            sextandsList.append(sxtnd)
-        end_time = datetime.now()
-        print('Time for lists to populate ---- > Duration: {}'.format(end_time - start_time))
-        print(sys.getsizeof(hexasList), "bytes")
+            self.square_sextands_list.append(((self.hexas_list[i] * self.hexas_list[i]) - 1) / 6)
+            self.sextands_list.append(sxtnd)
     
     # TODO
     def GenerateHexas(self, n):
@@ -116,34 +116,82 @@ class NumpyTPC:
         NOTES: May want to take an input and find the average gap in that range (e.g. if n = 2, find the average gap in [0, (5*7)) range
         """
     
-    def ValidCoordiniates(self):
+    def ValidCoordinatesArray(self):
         """INPUTS:
-    hexasNum: The number of hexas being examined
-    OUTPUT: .txt document given the coordinates where x is the number of hexas checked and y is the number of valid combos in critical area
-    """
+        hexasNum: The number of hexas being examined
+        OUTPUT: .txt document given the coordinates where x is the number of hexas checked and y is the number of valid combos in critical area
+        """
         combo = ""
-        valid_num = 0
+        validNum = 0
         hexas_checked = "Hexas checked: " + str(self.hexas_num) + "\n"
-        file_name = "valid_coordinates.txt"
+    
+        if os.path.exists(self.ARRAY_FILE_NAME):
+            os.remove(self.ARRAY_FILE_NAME)
+    
+        with open(self.ARRAY_FILE_NAME, "w") as file:
+            file.write(hexas_checked)
 
-        # TODO: file handling 
-
-        for i in range(2, self.hexas_num):
+        start_time = datetime.now()
+        for i in range(2, self.hexas_num + 1): # Cycle through all hexa pairs
             combo = "(" + str(i) + ","
-            valid_num = 0
+            # print(combo)
+            validNum = 0
 
-            for j in range(int(self.square_sextands_array[i - 2]), int(self.square_sextands_array[i - 1])):
+            for j in range(int(self.square_sextands_array[i-2]), int(self.square_sextands_array[i-1] + 1)):
                 valid = True
                 for k in range(i):
                     result1 = ((6 * j) % self.hexas_array[k] == 1)
                     result2 = (6 * j) % self.hexas_array[k] == self.hexas_array[k] - 1
                     if(result1 or result2):
                         valid = False
-                    if valid:
-                        valid_num += 1
-                combo += str(valid_num) + ")"
-                print(combo)
 
+                if(valid):
+                    validNum += 1
+            combo += str(validNum) + ")"
+            with open(self.ARRAY_FILE_NAME, "a") as file:
+                file.write(combo + '\n')
+        end_time = datetime.now()
+        print('Time for numpy arrays to populate ---- > Duration: {}'.format(end_time - start_time))
+        print("%d bytes" % (self.hexas_array.size * self.hexas_array.itemsize))
+
+    def ValidCoordinatesList(self):
+        """INPUTS:
+        hexasNum: The number of hexas being examined
+        OUTPUT: .txt document given the coordinates where x is the number of hexas checked and y is the number of valid combos in critical area
+        """
+
+        combo = ""
+        validNum = 0
+        hexas_checked = "Hexas checked: " + str(self.hexas_num) + "\n"
+    
+        if os.path.exists(self.LIST_FILE_NAME):
+            os.remove(self.LIST_FILE_NAME)
+    
+        with open(self.LIST_FILE_NAME, "w") as file:
+            file.write(hexas_checked)
+
+        start_time = datetime.now()
+        for i in range(2, self.hexas_num + 1): # Cycle through all hexa pairs
+            combo = "(" + str(i) + ","
+            # print(combo)
+            validNum = 0
+
+            for j in range(int(self.square_sextands_list[i-2]), int(self.square_sextands_list[i-1] + 1)):
+                valid = True
+                for k in range(i):
+                    result1 = ((6 * j) % self.hexas_list[k] == 1)
+                    result2 = (6 * j) % self.hexas_list[k] == self.hexas_list[k] - 1
+                    if(result1 or result2):
+                        valid = False
+
+                if(valid):
+                    validNum += 1
+            combo += str(validNum) + ")"
+            with open(self.LIST_FILE_NAME, "a") as file:
+                file.write(combo + '\n')
+        end_time = datetime.now()
+        print('Time for python lists to populate ---- > Duration: {}'.format(end_time - start_time))
+        print(sys.getsizeof(self.hexas_list), "bytes")
     # TODO
     def GenerateCombos(self, hexas_num):
         """INPUTS:
@@ -166,15 +214,13 @@ class NumpyTPC:
         Displays the start and end indices of the critical area being examined
         """
 
-array_size = 10000000
-hexas_num = 5
-tp = NumpyTPC(array_size, hexas_num)
-print("At array/list size = ", array_size)
-print("Nummpy array time")
+size = 1000
+hexas_num = 30
+tp = NumpyTPC(size, hexas_num)
 tp.populate_arrays()
-print()
-print("Python list time ")
 tp.populate_lists()
+tp.ValidCoordinatesArray()
+tp.ValidCoordinatesList()
 
 
 

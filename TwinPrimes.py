@@ -42,13 +42,17 @@ def FindInvalidChains(n):
     valid = True
     
     for i in range(n):
-        hexorial *= hexasList[i]	
-    for i in range((hexorial - 1) / 2):# Only need half the hexorial because validity is mirrored
+        hexorial *= hexasList[i]
+
+    hex = int((hexorial - 1)/ 2)	
+    for i in range(hex):# Only need half the hexorial because validity is mirrored
         valid = True
 		# check  if the index is valid With Respect To (WRT) each hexa checked
 		# NOTE: Take advantage of sextand-modulo reduction (only need to check sextand modulo h)
-        for j in n:
-            if(i % hexasList[j] == sextandsList[i] or i % hexasList[j] == hexasList[j] - sextandsList[j]):
+        for j in range(n):
+            result1 = (6 * i) % hexasList[j] == 1 
+            result2 = (6 * i) % hexasList[j] == hexasList[j] - 1
+            if(result1 or result2):
                 valid = False
 			
 			# Update the length of the chain of consecutive invalid indices
@@ -208,7 +212,7 @@ def GenerateCombos(hexasNum):
         valid = True
 
         print_statement = str(str(index) + ": ")
-        print(str(index), ":", end = " ")
+        print(str(index), ":")
         for i in range(0 , len(combo)):
             combo[i] = (index % hexasList[i])
         
