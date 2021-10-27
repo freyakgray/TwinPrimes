@@ -30,39 +30,62 @@ def GenerateHexas(n):
             squareSextand = 6*(currentSextand**2) + 2*currentSextand
             squareSextandsList.insert(i, int(squareSextand))
     
-def FindInvalidChains(n):
+def FindInvalidChains(size, n):
     """INPUT: n: the number of hexas to be examined during the run of the program
-    OUTPUT: Determines the longest chain of consecutive invalid indices. Prints out the starting index of this chain and its length"""
-    if n > len(hexasList):
-        n = len(hexasList)
+    OUTPUT: Determines the longest chain of consecutive invalid indices. 
+    Prints out the starting index of this chain and its length
+    """
+
+    # Populate hexas array and square_sextands_array
+    sxtnd = 0
+    for i in range(size):
+        if((i + 1) % 2 == 1):
+            hexasList[i] =  ((3 * (i + 2)) - 1)
+            sxtnd += 1
+               
+        else:
+            hexasList[i] = ((3 * (i + 1)) + 1)
+
+        squareSextandsList[i] =  (((hexasList[i] * hexasList[i]) - 1) / 6)
+        sextandsList[i] =  sxtnd
+
+    # Integers
     hexorial = 1
-    invalidStart = 0
-    invalidLength = 0
-    maxInvalid = 0
+    invalid_start = 0
+    invalid_length = 0
+    max_invalid = 0
+
+
+    # Boolean
     valid = True
+
+    for i in range(n - 1):
+        hexorial *= hexasList[i]
     
-    for i in range(n):
-        hexorial *= hexasList[i]	
-    for i in range((hexorial - 1) / 2):# Only need half the hexorial because validity is mirrored
+    hex = int((hexorial - 1)/ 2)
+    for i in range(hex):
         valid = True
-		# check  if the index is valid With Respect To (WRT) each hexa checked
-		# NOTE: Take advantage of sextand-modulo reduction (only need to check sextand modulo h)
-        for j in n:
-            if(i % hexasList[j] == sextandsList[i] or i % hexasList[j] == hexasList[j] - sextandsList[j]):
+        for j in range(n - 1):
+            result1 = (6 * i) % hexasList[j] == 1 
+            result2 = (6 * i) % hexasList[j] == hexasList[j] - 1
+            if(result1 or result2):
                 valid = False
-			
-			# Update the length of the chain of consecutive invalid indices
-            if not(valid):
-                invalidLength+=1
-                if maxInvalid < invalidLength:
-                    maxInvalid = invalidLength
-                    invalidStart = i + 1 - maxInvalid
-            else:
-                invalidLength = 0
-	#Visual output
-    print("Start of max chain: " + str(invalidStart) + '\n'+ 
-    "Max length chain: " + str(maxInvalid) + '\n' + 
-    "Critical Zone size: " + str((squareSextandsList[n - 1] - squareSextandsList[n - 2])))
+
+        if(valid != True):
+            invalid_length = invalid_length + 1
+            if(max_invalid < invalid_length):
+                max_invalid = invalid_length
+                invalid_start = i + 1 - max_invalid
+
+        else:
+            invalid_length = 0
+
+    
+    print("Start of max chain: " + str(invalid_start) + '\n')
+    print("Max length chain: " + str(max_invalid) + '\n')
+    print("Critical Zone size: " + str(squareSextandsList[n - 1] - squareSextandsList[n - 2]))
+    
+    
 
 def GenerateCombo(hexasChecked, index):
     """
