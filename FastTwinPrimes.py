@@ -7,8 +7,18 @@ warnings.filterwarnings('ignore')
 
 
 #size = int(input("Enter size of your own choosing to intialize arrays: "))
+
+@jit(nopython = True, parallel = True)
+def InitializeArrays(size):
+    # Arrays 
+    hexas_array = np.empty(size)
+    sextands_array = np.empty(size)
+    square_sextands_array = np.empty(size)
+    return hexas_array, sextands_array, square_sextands_array
+
+
 @jit(fastmath = True)
-def GenerateHexas(size):
+def GenerateHexas(hexas_num):
     """INPUT: 
     n: the number of hexas to be examined during the run of the program
     OUTPUT: 
@@ -17,12 +27,10 @@ def GenerateHexas(size):
     squareSextandsList: the list of related square sextands
     """
     # Arrays 
-    hexas_array = np.empty(size)
-    sextands_array = np.empty(size)
-    square_sextands_array = np.empty(size)
+    hexas_array, sextands_array, square_sextands_array = InitializeArrays(hexas_num)
 
-    assert size >= 1
-    for i in range(size):
+    assert hexas_num >= 1
+    for i in range(hexas_num):
         current_hexa = 3*(i + 1) + (3/2) - ((-1)**(i + 1) * (1/2))
         hexas_array[i] = current_hexa
         current_sextand = ((1/2) * (i+1)) + (1/4) + ((1/4) * (-1)**((i+1) - 1))
@@ -42,19 +50,16 @@ def GenerateHexas(size):
     print(hexas_array.astype(int))
 
 @jit(fastmath = True)
-def FindInvalidChains(size, n):
+def FindInvalidChains(hexas_num, n):
     """INPUT: n: the number of hexas to be examined during the run of the program
     OUTPUT: Determines the longest chain of consecutive invalid indices. 
     Prints out the starting index of this chain and its length
     """
     # Arrays
-    hexas_array = np.empty(size)
-    square_sextands_array = np.empty(size)
-    sextands_array = np.empty(size)
-
+    hexas_array, sextands_array, square_sextands_array = InitializeArrays(hexas_num)
     
     sxtnd = 0
-    for i in range(size):
+    for i in range(hexas_num):
         if((i + 1) % 2 == 1):
             hexas_array[i] =  ((3 * (i + 2)) - 1)
             sxtnd += 1
@@ -100,7 +105,46 @@ def FindInvalidChains(size, n):
     print("Max length chain: " + str(max_invalid) + '\n')
     print("Critical Zone size: " + str(square_sextands_array[n - 1] - square_sextands_array[n - 2]))
 
-FindInvalidChains(1000, 8)
+@jit(fastmath = True)
+def GenerateCombo(hexas_num, index):
+    """
+    INPUT: 
+    hexasChecked: The number of hexas checked (must be less than the number of hexas generated)
+    index: index to check combo
+    RETURNS:
+    combo: a string with the combos for a certain index, < denotes the combo is valid
+    """
+    # Arrays
+    hexas_array, sextands_array, square_sextands_array = InitializeArrays(hexas_num + 1)
+    sxtnd = 0
+    for i in range(hexas_num):
+        if((i + 1) % 2 == 1):
+            hexas_array[i] =  ((3 * (i + 2)) - 1)
+            sxtnd += 1
+               
+        else:
+            hexas_array[i] = ((3 * (i + 1)) + 1)
+
+        square_sextands_array[i] =  (((hexas_array[i] * hexas_array[i]) - 1) / 6)
+        sextands_array[i] =  sxtnd
+
+    assert hexas_num < len(hexas_array)
+    assert hexas_num >= 1
+    assert index >= 1
+    valid = True
+    combo = ""
+    for i in range(hexas_num):
+        mod = index % hexas_array[i]
+        str_mod = str(mod)
+        combo += str_mod + " "
+        one = mod == 1
+        previous = mod == hexas_array[i] - 1
+        if (one or previous):
+            valid = False
+    if(valid):
+        combo += "< "
+    return combo 
+GenerateCombo(4, 28)
 
 
     

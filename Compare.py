@@ -3,8 +3,11 @@ import FastTwinPrimes as ftp
 import time
 from numba import jit
 
-test_size = 10000000
+test_size = 100000
 hexas_num = 8
+index = 28
+start_index = 20
+end_index= 8
 
 print("###################################################################################")
 print("GeneratHexas: \n Testing times @size = ", test_size, "...")
@@ -28,7 +31,32 @@ print("numba.jit: ",end - start, "seconds")
 
 
 start = time.time()
-tp.FindInvalidChains(test_size, hexas_num)
+tp.FindInvalidChains(hexas_num)
+end = time.time()
+print("lists: ",end - start, "seconds")
+print("###################################################################################")
+
+
+start = time.time()
+ftp.GenerateCombo(hexas_num, index)
+end = time.time()
+print("numba.jit: ",end - start, "seconds")
+
+
+start = time.time()
+tp.GenerateCombo(hexas_num, index)
+end = time.time()
+print("lists: ",end - start, "seconds")
+print("###################################################################################")
+
+start = time.time()
+ftp.ViewCombo(hexas_num, start_index, end_index)
+end = time.time()
+print("numba.jit: ",end - start, "seconds")
+
+
+start = time.time()
+tp.ViewCombo(hexas_num, start_index, end_index)
 end = time.time()
 print("lists: ",end - start, "seconds")
 print("###################################################################################")

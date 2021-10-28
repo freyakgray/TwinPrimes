@@ -1,4 +1,5 @@
 import TwinPrimes as tp
+import FastTwinPrimes as ftp
 
 tp.GenerateHexas(20)
 tp.FindInvalidChains(5)
@@ -10,3 +11,7 @@ tp.ValidCoordinates(8)
 tp.GenerateCombos(4)
 tp.ValidNumApproximation(20)
 tp.ViewCritArea()
+
+ftp.GenerateHexas(20)
+ftp.FindInvalidChains(1000, 5)
+ftp.GenerateCombo(4, 28)

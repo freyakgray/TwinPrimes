@@ -30,24 +30,11 @@ def GenerateHexas(n):
             squareSextand = 6*(currentSextand**2) + 2*currentSextand
             squareSextandsList.insert(i, int(squareSextand))
     
-def FindInvalidChains(size, n):
+def FindInvalidChains(n):
     """INPUT: n: the number of hexas to be examined during the run of the program
     OUTPUT: Determines the longest chain of consecutive invalid indices. 
     Prints out the starting index of this chain and its length
     """
-
-    # Populate hexas array and square_sextands_array
-    sxtnd = 0
-    for i in range(size):
-        if((i + 1) % 2 == 1):
-            hexasList[i] =  ((3 * (i + 2)) - 1)
-            sxtnd += 1
-               
-        else:
-            hexasList[i] = ((3 * (i + 1)) + 1)
-
-        squareSextandsList[i] =  (((hexasList[i] * hexasList[i]) - 1) / 6)
-        sextandsList[i] =  sxtnd
 
     # Integers
     hexorial = 1
