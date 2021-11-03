@@ -67,13 +67,6 @@ def FindInvalidChains(n):
         else:
             invalid_length = 0
 
-    
-    print("Start of max chain: " + str(invalid_start) + '\n')
-    print("Max length chain: " + str(max_invalid) + '\n')
-    print("Critical Zone size: " + str(squareSextandsList[n - 1] - squareSextandsList[n - 2]))
-    
-    
-
 def GenerateCombo(hexasChecked, index):
     """
     INPUT: 
@@ -110,12 +103,10 @@ def ViewCombo(hexasChecked, start, length):
     assert hexasChecked,length >= 1
     combosList = []
     end = start + length
-    print("Hexas checked: " + str(hexasChecked) + "\n")
     for i in range(start,end):
         combo = str(i) + ": "
         combo += GenerateCombo(hexasChecked, i)
         combosList.insert(i, combo)
-        print(combo + "\n")
     return combosList
 
 def ViewCritCombos(hexasChecked):

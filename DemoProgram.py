@@ -12,6 +12,3 @@ tp.GenerateCombos(4)
 tp.ValidNumApproximation(20)
 tp.ViewCritArea()
 
-ftp.GenerateHexas(20)
-ftp.FindInvalidChains(1000, 5)
-ftp.GenerateCombo(4, 28)
