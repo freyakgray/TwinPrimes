@@ -6,10 +6,10 @@ import pandas as pd
 
 
 # Global Variables 
-size = 1000
-hexas_num = 6
+size = 10000
+hexas_num = 3
 index = 28
-hexas_checked = 10
+hexas_checked = 3
 start = 20
 length = 4
 
@@ -27,9 +27,9 @@ def run_twin_primes():
     tp.ValidNumApproximation(hexas_num)
     end_tp = time.time()
     elapsed_tp = end_tp - start_tp
-    print("List: " + str(elapsed_tp))
+    return elapsed_tp
 
-def run_fast_twin_primes():
+def run_numba_twin_primes():
     start_ftp = time.time()
     ftp.GenerateHexas(size)
     ftp.FindInvalidChains(hexas_num)
@@ -42,23 +42,25 @@ def run_fast_twin_primes():
     ftp.ValidNumApproximation(hexas_num)
     end_ftp = time.time()
     elapsed_ftp = end_ftp - start_ftp
-    print("numba.jit: " + str(elapsed_ftp))
-
-def best():
-    size_req = (size >= 10000000 or hexas_num >= 6 or size >= 10000000)
-    if(size_req):
-        return run_fast_twin_primes()
-    else:
-        return run_twin_primes()
+    return elapsed_ftp
 
 
-def compare_both():
-    print("Comparing Both ... ")
-    run_fast_twin_primes()
-    run_twin_primes()
-    
-compare_both()
-best()
+
+print()
+print("Comparing times....")
+print("At Size: ", size)
+print("At Hexas Number: " , hexas_num)
+time_ftp = run_numba_twin_primes()
+time_tp = run_twin_primes()
+print("List: ", time_tp)
+print("numba.jit: ", time_ftp)
+
+size_req = (size >= 10000000 or hexas_num >= 6)
+if(size_req):
+    print(run_numba_twin_primes())
+else:
+    print(run_twin_primes())
+
     
 
 
