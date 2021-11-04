@@ -6,8 +6,8 @@ import pandas as pd
 
 
 # Global Variables 
-size = 100000
-hexas_num = 8
+size = 1000
+hexas_num = 6
 index = 28
 hexas_checked = 10
 start = 20
@@ -53,15 +53,11 @@ def best():
 
 
 def compare_both():
+    print("Comparing Both ... ")
     run_fast_twin_primes()
     run_twin_primes()
-
-print()
-print("Size: ", size)
-print("Number of Hexas = ", hexas_num)
+    
 compare_both()
-print()
-print("Faster choice: ")
 best()
     
 
