@@ -2,11 +2,13 @@ language: python
 addons:
   sonarcloud:
     organization: "twinprimes" # the key of the org you chose at step #3
-before_install:
+before_install: 
   - pip install -U pip
   - pip install -U pytest
   - pip install coverage
+  - pip install numpy
+  - pip install numba
 script:
-  - coverage run -m pytest TwinPrimes.py Tests
+  - coverage run -m pytest Tests
   - coverage xml
   - sonar-scanner
