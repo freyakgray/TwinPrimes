@@ -21,13 +21,13 @@ def GenerateHexasGPU(hexaArray, sextandsArray, squareSextandsArray):
     """
     hexas = hexaArray.size
     pos = cuda.grid(1)
-    for pos in range(hexas):
+    if(pos < hexas):
         hexaArray[pos] = 3*(pos + 1) + (3/2) - ((-1)**(pos + 1) * (1/2))
         sextandsArray[pos] = ((1/2) * (pos+1)) + (1/4) + ((1/4) * (-1)**((pos+1) - 1))
         if pos % 2 == 0:
             squareSextandsArray[pos] = 6*(sextandsArray[pos]**2) - 2*sextandsArray[pos]
         else:
-            squareSextandsArray[pos] = 6*(sextandsArray[pos]**2) + 2*sextandsArray[pos] 
+            squareSextandsArray[pos] = 6*(sextandsArray[pos]**2) + 2*sextandsArray[pos]
 
 def RunGenerateHexasGPU(hexas: int):
     """
@@ -58,7 +58,6 @@ def RunGenerateHexasGPU(hexas: int):
     
     return hexaArray,sextandsArray, squareSextandsArray
 
-"TODO: optimize"
 @cuda.jit
 def GenerateCombosGPU(hexasChecked, start, end, hexaArray, comboArray):
     """
@@ -73,15 +72,13 @@ def GenerateCombosGPU(hexasChecked, start, end, hexaArray, comboArray):
     comboArray (numpy array): A 2d array that the function will alter with the index, combo and validity
     """
     x,y = cuda.grid(2)
-    for x in range(start, end): #maybe if for both threads
-        valid = True
+    if(x < end and y < hexasChecked):
+      if(y == 0):
         comboArray[x,0] = x
-        for y in range(hexasChecked): #maybe (1,hexasChecked)
-            comboArray[x, (y + 1)] = (x % hexaArray[y])
-            if(x % hexaArray[y] == 1) or (x % hexaArray[y] == hexaArray[y] - 1):
-                valid = False
-        if(valid):
-            comboArray[x, -1] = 1
+      if(y!= 0 or y!= (hexasChecked + 2)):
+        comboArray[x, (y + 1)] = (x % hexaArray[y])
+        if(x % hexaArray[y] == 1) or (x % hexaArray[y] == hexaArray[y] - 1):
+          comboArray[x,-1] = 0
 
 def RunGenerateCombosGPU(hexasChecked, start, length, hexaArray):
     """
@@ -97,6 +94,7 @@ def RunGenerateCombosGPU(hexasChecked, start, length, hexaArray):
     """
     end = start + length
     comboArray = np.zeros([length, (hexasChecked + 2)],dtype = int)
+    comboArray[:,-1] = 1
     
     deviceCombo = cuda.to_device(comboArray, stream = stream)
     deviceHexa = cuda.to_device(hexaArray, stream = stream)
