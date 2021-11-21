@@ -79,7 +79,7 @@ def GenerateCombo(hexasChecked, index):
     combo = ""
     for i in range(hexasChecked):
         combo += str(index % hexasList[i]) + " "
-        if (index % hexasList[i] == 1) or (index % hexasList[i] == hexasList[i] - 1):
+        if (index % hexasList[i] == sextandsList[i]) or (index % hexasList[i] == hexasList[i] - sextandsList[i]):
             valid = False
     if(valid):
         combo += "< "
@@ -160,7 +160,7 @@ def ValidCoordinates(hexasNum):
         # print(combo)
         validNum = 0
 
-        for j in range(int(squareSextandsList[i-2]), int(squareSextandsList[i-1] + 1)):
+        for j in range(int(squareSextandsList[i-2]), int(squareSextandsList[i-1])):
             valid = True
             for k in range(i):
                 result1 = ((6 * j) % hexasList[k] == 1)
