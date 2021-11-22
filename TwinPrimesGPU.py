@@ -5,58 +5,51 @@ from numpy.lib import math
 stream = cuda.stream()
 
 @cuda.jit
-def GenerateHexasGPU(hexaArray, sextandsArray, squareSextandsArray):
+def GenerateHexasGPU(hexaArray):
     """
     Generates hexas, sextands and square sextands using a GPU
 
     Parameters: 
-    hexaArray (numpy array): an empty numpy array where the hexas will be populated. 
-    Size of the array will determine the number of hexas generated. The array must be sent to the host with cuda.to_device.
-
-    sextandsArray (numpy array): an empty numpy array where the sextands will be populated. 
-    Size of array must match the size of the hexaArray. The array must be sent to the host with cuda.to_device.
-
-    squareSextandsArray (numpy array): an empty numpy array where the square sextands will be populated.
-    Size of array must match the size of the hexaArray. The array must be sent to the host with cuda.to_device.
+    hexaArray (numpy array): an empty numpy array where the hexas, sextands and square sextands will be populated. 
+    Size of the array will determine the number of hexas, sextands and square sextands  generated. 
+    The array must be sent to the host with cuda.to_device.
     """
     hexas = hexaArray.size
-    pos = cuda.grid(1)
-    if(pos < hexas):
-        hexaArray[pos] = 3*(pos + 1) + (3/2) - ((-1)**(pos + 1) * (1/2))
-        sextandsArray[pos] = ((1/2) * (pos+1)) + (1/4) + ((1/4) * (-1)**((pos+1) - 1))
-        if pos % 2 == 0:
-            squareSextandsArray[pos] = 6*(sextandsArray[pos]**2) - 2*sextandsArray[pos]
-        else:
-            squareSextandsArray[pos] = 6*(sextandsArray[pos]**2) + 2*sextandsArray[pos]
+    x,y = cuda.grid(2)
+    if(x < hexaArray.shape[0] and y < hexaArray.shape[1]):
+        if(x == 0 ):
+            hexaArray[0,y] = 3*(y + 1) + (3/2) - ((-1)**(y + 1) * (1/2))
+        if(x == 1):
+            hexaArray[1,y] = ((1/2) * (y+1)) + (1/4) + ((1/4) * (-1)**((y+1) - 1))
+        if(x == 2):
+            currentSextand = ((1/2) * (y+1)) + (1/4) + ((1/4) * (-1)**((y+1) - 1))
+            if (y % 2 == 0):
+                hexaArray[2,y] = 6*(currentSextand**2) - 2*currentSextand
+            else:
+                hexaArray[2,y] = 6*(currentSextand**2) + 2*currentSextand
 
 def RunGenerateHexasGPU(hexas: int):
     """
-    Runs GenerateHexasGPU kernel. Initializes arrays, sends them to the GPU, runs the kernel and returns the arrays to the host.
+    Runs GenerateHexasGPU kernel. Initializes array, sends it to the GPU, runs the kernel and returns the array to the host.
     
     Parameters: 
     hexas (int): the number of hexas to generate
 
     Returns:
-    hexaArray (numpy array): an array of hexas of size hexas
-    sextandsArray (numpy array): an array of sextands of size hexas
-    squareSextandsArray (numpy array): an array of square sextands of size hexas
+    hexaArray (numpy array): an array of hexas, sextands and square sextands of size hexas
     """
-    hexaArray = np.empty(hexas, dtype = np.uint64)
-    sextandsArray = np.empty(hexas, dtype = np.uint64)
-    squareSextandsArray = np.empty(hexas, dtype = np.uint64)
+    hexaArray = np.empty([3,hexas], dtype = np.uint64)
 
     deviceHexa = cuda.to_device(hexaArray, stream = stream)
-    deviceSextands = cuda.to_device(sextandsArray, stream = stream)
-    deviceSquareSextands = cuda.to_device(squareSextandsArray, stream = stream)
 
-    threadsPerBlock = 32
-    blocksPerGrid = (hexaArray.size + (threadsPerBlock - 1)) // threadsPerBlock
-    GenerateHexasGPU[blocksPerGrid, threadsPerBlock](deviceHexa,deviceSextands,deviceSquareSextands)
+    threadsPerBlock = (16,16)
+    blocksPerGridX = math.ceil(3 / threadsPerBlock[0])
+    blocksPerGridY = math.ceil(hexas / threadsPerBlock[1])
+    blocksPerGrid = (blocksPerGridX,blocksPerGridY)
+    GenerateHexasGPU[blocksPerGrid, threadsPerBlock](deviceHexa)
     hexaArray = deviceHexa.copy_to_host(stream = stream)
-    sextandsArray = deviceSextands.copy_to_host(stream = stream)
-    squareSextandsArray = deviceSquareSextands.copy_to_host(stream = stream)
     
-    return hexaArray,sextandsArray, squareSextandsArray
+    return hexaArray
 
 @cuda.jit
 def GenerateCombosGPU(hexasChecked, start, end, hexaArray, comboArray):
@@ -68,16 +61,18 @@ def GenerateCombosGPU(hexasChecked, start, end, hexaArray, comboArray):
     hexasChecked (int): The number of hexas checked (must be less than the number of hexas generated)
     start (int): first index to check combo validity
     end (int): the last index to check combo validity
-    hexaArray (numpy array): An array of hexas
+    hexaArray (numpy array): An array of hexas, sextands and square sextands
     comboArray (numpy array): A 2d array that the function will alter with the index, combo and validity
     """
     x,y = cuda.grid(2)
+    #if((x > start and y > start) and (x < end and y < hexasChecked)):
+    #if((x >= start and x <= end) and (y >= start and y <= hexasChecked)):    
     if(x < end and y < hexasChecked):
       if(y == 0):
         comboArray[x,0] = x
       if(y!= 0 or y!= (hexasChecked + 2)):
-        comboArray[x, (y + 1)] = (x % hexaArray[y])
-        if(x % hexaArray[y] == 1) or (x % hexaArray[y] == hexaArray[y] - 1):
+        comboArray[x, (y + 1)] = (x % hexaArray[0,y])
+        if(x % hexaArray[0,y] == hexaArray[1,y]) or (x % hexaArray[0,y] == hexaArray[0,y] - hexaArray[1,y]):
           comboArray[x,-1] = 0
 
 def RunGenerateCombosGPU(hexasChecked, start, length, hexaArray):
@@ -108,13 +103,13 @@ def RunGenerateCombosGPU(hexasChecked, start, length, hexaArray):
     comboArray = deviceCombo.copy_to_host(stream = stream)
     return comboArray
 
-def FindInvalidChainsGPU(comboArray, squareSextandsArray):
+def FindInvalidChainsGPU(hexasChecked, hexaArray):
     """
     Determines the longest chain of consecutive invalid indices. Must pass in an array generated with GenerateComboArray
     
     Parameters: 
-    comboArray (numpyArray): An array generated with GenerateComboArray
-    squareSextandsArray (numpyArray): An array of square sextands generated with GenerateHexasGPU
+    hexasChecked (int): The number of hexas to be checked
+    hexaArray (numpyArray): An array of hexas, sextands and square sextands
 
     Returns: 
     invalidStart (int): start of the longest invalid chain
@@ -124,8 +119,15 @@ def FindInvalidChainsGPU(comboArray, squareSextandsArray):
     invalidStart = 0
     invalidLength = 0
     maxInvalid = 0
+    hexorial = 1
+    
+    for i in range(hexasChecked-1):
+        hexorial *= hexaArray[0,i]
+    hexorial = int((hexorial - 1)/2)
 
-    for i in range(comboArray.shape[0]):
+    comboArray = RunGenerateCombosGPU(hexasChecked,0,hexorial,hexaArray)
+
+    for i in range(hexorial):
         if(comboArray[i,-1] == 0):
             invalidLength += 1
             if(maxInvalid < invalidLength):
@@ -133,8 +135,8 @@ def FindInvalidChainsGPU(comboArray, squareSextandsArray):
                 invalidStart = i + 1 - maxInvalid
         else:
             invalidLength = 0
-    hexasChecked = comboArray.shape[1]-2
-    criticalZoneSize = (squareSextandsArray[hexasChecked - 1] - squareSextandsArray[hexasChecked - 2])
+
+    criticalZoneSize = (hexaArray[2,hexasChecked - 1] - hexaArray[2,hexasChecked - 2])
     return invalidStart, maxInvalid, criticalZoneSize
 
 def ViewCritCombosGPU(hexasChecked, comboArray):
@@ -172,19 +174,19 @@ def FindAverageGapGPU(hexasChecked, hexaArray):
     """
     num, denom = 1,1
     for i in range(0,hexasChecked):
-        num *= int(hexaArray[i])
-        denom *= int(hexaArray[i])-2
+        num *= int(hexaArray[0,i])
+        denom *= int(hexaArray[0,i])-2
     gap = num/denom
     return num, denom, gap
   
-def ValidCoordinatesGPU(comboArray, squareSextandsArray):
+def ValidCoordinatesGPU(comboArray, hexaArray):
     """
     Calculates coordinates where x is the number of hexas checked and y is the number of valid combos in critical area.
 
     Parameters:
     comboArray (numpy array): An array of combos generated with GenerateComboGPU. Array must have 
     more indices than the critical area. 
-    squareSextandsArray (numpy array): An array of square sextands generated with GenerateHexasGPU.
+    hexaArray (numpy array): An array of hexas, sextands and square sextands generated with GenerateHexasGPU.
 
     Returns: 
     coordinatesArray (numpy array): An array of coordinates where the first column is the number of hexas checked 
@@ -195,21 +197,20 @@ def ValidCoordinatesGPU(comboArray, squareSextandsArray):
     for i in range(2, comboArray.shape[1] - 1):
         coordinatesArray[i-2,0] = i
         validNum = 0
-        for j in range(int(squareSextandsArray[i-2]), int(squareSextandsArray[i-1]+1)):
+        for j in range(int(hexaArray[2,i-2]), int(hexaArray[2, i-1]+1)):
             if(comboArray[j,-1] == 1):
                 validNum += 1
         coordinatesArray[i-2,1] = validNum
     return coordinatesArray
 
-def ValidNumApproximationGPU(hexasNum, hexaArray, squareSextandsArray, comboArray):
+def ValidNumApproximationGPU(hexasNum, hexaArray, comboArray):
     """
     Calculates the expected number of valid combos within the domain (i.e. [1, A] where A is the upper bound of
     the critical area), calculates the actual number of valid combos and calulates the error between the two.
     
     Parameters: 
     hexasNum (int): The number of hexas to be checked
-    hexaArray (numpy array): An array of square sextands generated with GenerateHexasGPU
-    squareSextandsArray (numpy array): an array of hexas generated with GenerateHexasGPU
+    hexaArray (numpy array): An array of hexas, sextands and square sextands generated with GenerateHexasGPU
     comboArray (numpy array): An array of combos generated with GenerateCombosGPU. The array must have been generated with at least hexasNum of hexas.
 
     Returns: 
@@ -217,11 +218,11 @@ def ValidNumApproximationGPU(hexasNum, hexaArray, squareSextandsArray, comboArra
     comboTrue (int): The actual number of valid combos
     errorPercent (int): The error between comboApproximation and comboTrue
     """
-    endPoint = int(squareSextandsArray[hexasNum - 1])
+    endPoint = int(hexaArray[2,hexasNum - 1])
     
     comboApproximation = 1
     for i in range(hexasNum):
-        comboApproximation *= (float(hexaArray[i]-2))/(float(hexaArray[i]))
+        comboApproximation *= (float(hexaArray[0,i]-2))/(float(hexaArray[0,i]))
     comboApproximation *= endPoint
 
     comboTrue = np.count_nonzero(comboArray[1:endPoint,-1:])
@@ -229,20 +230,18 @@ def ValidNumApproximationGPU(hexasNum, hexaArray, squareSextandsArray, comboArra
     errorPercent = error * 100
     return comboApproximation, comboTrue, errorPercent
 
-def ViewCritAreaGPU(hexasArray):
+def ViewCritAreaGPU(hexaArray):
     """
     Calculates the start and end indices of the critical area
     
     Parameters:
-    hexasArray (numpy array): An array of hexas generated with GenerateHexasGPU
+    hexaArray (numpy array): An array of hexas, sextands and square sextands generated with GenerateHexasGPU
 
     Returns:
     start (int): start of the critical area
     end (int): end of the critical area
     """
-    length = hexasArray.size - 1
-    limit = hexasArray[length]
-    subtend = hexasArray[length -1]
-    start = int((subtend**2 - 1)/6)
-    end = int((limit**2 - 1)/6)
+    length = hexaArray.shape[1]
+    start = hexaArray[2,length - 2]
+    end = hexaArray[2,length - 1]
     return start, end

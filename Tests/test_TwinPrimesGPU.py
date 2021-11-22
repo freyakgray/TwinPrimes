@@ -5,10 +5,10 @@ os.environ['DISABLE_JIT'] = "1"
 import TwinPrimesGPU as gpu
 import numpy as np
 
-hexas = np.array([5, 7, 11, 13, 17, 19, 23, 25, 29, 31, 35, 37, 41, 43, 
-    47, 49, 53, 55, 59, 61, 65, 67, 71, 73, 77])
-sextands = np.array([1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13])
-squareSextands = np.array([4, 8, 20, 28, 48, 60, 88, 104, 140, 160, 204, 228, 280, 308, 368, 400, 468, 504, 580, 620, 704, 748, 840, 888, 988])
+hexas = np.array([[5, 7, 11, 13, 17, 19, 23, 25, 29, 31, 35, 37, 41, 43, 
+    47, 49, 53, 55, 59, 61, 65, 67, 71, 73, 77],
+    [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13],
+    [4, 8, 20, 28, 48, 60, 88, 104, 140, 160, 204, 228, 280, 308, 368, 400, 468, 504, 580, 620, 704, 748, 840, 888, 988]])
 correctCombo = np.array([[0,0,0,0,0,0,0,1],
                         [1,1,1,1,1,1,1,0],
                         [2,2,2,2,2,2,2,1],
@@ -71,10 +71,8 @@ correctCombo = np.array([[0,0,0,0,0,0,0,1],
                         [59,4,3,4,7,8,2,0],
                         [60,0,4,5,8,9,3,1]])
 def test_GenerateHexasGPU():
-    hexaArray, sextandsArray, squareSextandsArray = gpu.RunGenerateHexasGPU(25)
+    hexaArray = gpu.RunGenerateHexasGPU(25)
     assert np.array_equal(hexas, hexaArray) 
-    assert np.array_equal(sextands, sextandsArray) 
-    assert np.array_equal(squareSextands, squareSextandsArray)
 
 def test_GenerateCombosGPU():
     comboArray = gpu.RunGenerateCombosGPU(6,0,61,hexas)
