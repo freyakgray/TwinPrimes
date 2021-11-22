@@ -5,7 +5,7 @@ from numpy.lib import math
 stream = cuda.stream()
 
 @cuda.jit
-def GenerateHexasGPU(hexaArray):
+def GenerateHexasGPU(hexaArray: np.array):
     """
     Generates hexas, sextands and square sextands using a GPU
 
@@ -52,22 +52,19 @@ def RunGenerateHexasGPU(hexas: int):
     return hexaArray
 
 @cuda.jit
-def GenerateCombosGPU(hexasChecked, start, end, hexaArray, comboArray):
+def GenerateCombosGPU(hexasChecked: int, length: int, hexaArray: np.array, comboArray: np.array):
     """
     Generates combos of length hexasChecked and checks for validity. First column is the index.
     Last column indicates validity, 0 for invalid, 1 for valid.
     
     Parameters: 
     hexasChecked (int): The number of hexas checked (must be less than the number of hexas generated)
-    start (int): first index to check combo validity
-    end (int): the last index to check combo validity
+    length (int): the last index to check combo validity
     hexaArray (numpy array): An array of hexas, sextands and square sextands
     comboArray (numpy array): A 2d array that the function will alter with the index, combo and validity
     """
-    x,y = cuda.grid(2)
-    #if((x > start and y > start) and (x < end and y < hexasChecked)):
-    #if((x >= start and x <= end) and (y >= start and y <= hexasChecked)):    
-    if(x < end and y < hexasChecked):
+    x,y = cuda.grid(2)  
+    if(x < length and y < hexasChecked):
       if(y == 0):
         comboArray[x,0] = x
       if(y!= 0 or y!= (hexasChecked + 2)):
@@ -75,19 +72,17 @@ def GenerateCombosGPU(hexasChecked, start, end, hexaArray, comboArray):
         if(x % hexaArray[0,y] == hexaArray[1,y]) or (x % hexaArray[0,y] == hexaArray[0,y] - hexaArray[1,y]):
           comboArray[x,-1] = 0
 
-def RunGenerateCombosGPU(hexasChecked, start, length, hexaArray):
+def RunGenerateCombosGPU(hexasChecked: int, length: int, hexaArray: np.array):
     """
     Runs GeneratesCombosGPU kernel. Initializes arrays, sends them to the GPU, runs the kernel and returns the arrays to the host.
     
     Parameters:
     hexasChecked (int): The number of hexas checked (must be less than the number of hexas generated)
-    start (int): first index to check combo validity
     length int): The number of indices to check
     
     Returns: 
     combosLArray (numpy array): A 2d array of combos and their validity 
     """
-    end = start + length
     comboArray = np.zeros([length, (hexasChecked + 2)],dtype = int)
     comboArray[:,-1] = 1
     
@@ -98,12 +93,12 @@ def RunGenerateCombosGPU(hexasChecked, start, length, hexaArray):
     blocksPerGridX = math.ceil(length / threadsPerBlock[0])
     blocksPerGridY = math.ceil(hexasChecked / threadsPerBlock[1])
     blocksPerGrid = (blocksPerGridX,blocksPerGridY)
-    GenerateCombosGPU[blocksPerGrid, threadsPerBlock](hexasChecked, start, end, deviceHexa, deviceCombo)
+    GenerateCombosGPU[blocksPerGrid, threadsPerBlock](hexasChecked, length, deviceHexa, deviceCombo)
 
     comboArray = deviceCombo.copy_to_host(stream = stream)
     return comboArray
 
-def FindInvalidChainsGPU(hexasChecked, hexaArray):
+def FindInvalidChainsGPU(hexasChecked: int, hexaArray: np.array):
     """
     Determines the longest chain of consecutive invalid indices. Must pass in an array generated with GenerateComboArray
     
@@ -121,7 +116,7 @@ def FindInvalidChainsGPU(hexasChecked, hexaArray):
     maxInvalid = 0
     hexorial = 1
     
-    for i in range(hexasChecked-1):
+    for i in range(hexasChecked):
         hexorial *= hexaArray[0,i]
     hexorial = int((hexorial - 1)/2)
 
@@ -139,7 +134,7 @@ def FindInvalidChainsGPU(hexasChecked, hexaArray):
     criticalZoneSize = (hexaArray[2,hexasChecked - 1] - hexaArray[2,hexasChecked - 2])
     return invalidStart, maxInvalid, criticalZoneSize
 
-def ViewCritCombosGPU(hexasChecked, comboArray):
+def ViewCritCombosGPU(hexasChecked: int, comboArray: np.array):
     """
     Slices an array generated with GenerateComboArray to contain the combos of the critical area.
 
@@ -159,7 +154,7 @@ def ViewCritCombosGPU(hexasChecked, comboArray):
     critCombosArray = comboArray[:endPoint+1,:]
     return critCombosArray
  
-def FindAverageGapGPU(hexasChecked, hexaArray):
+def FindAverageGapGPU(hexasChecked: int, hexaArray: np.array):
     """
     Calculates the hexorial, lexorial and gap of a hexasChecked amount of hexas.
     
@@ -173,13 +168,13 @@ def FindAverageGapGPU(hexasChecked, hexaArray):
     gap (float): average of hexorial/lexorial
     """
     num, denom = 1,1
-    for i in range(0,hexasChecked):
+    for i in range(hexasChecked):
         num *= int(hexaArray[0,i])
         denom *= int(hexaArray[0,i])-2
     gap = num/denom
     return num, denom, gap
   
-def ValidCoordinatesGPU(comboArray, hexaArray):
+def ValidCoordinatesGPU(comboArray: np.array, hexaArray: np.array):
     """
     Calculates coordinates where x is the number of hexas checked and y is the number of valid combos in critical area.
 
@@ -203,7 +198,7 @@ def ValidCoordinatesGPU(comboArray, hexaArray):
         coordinatesArray[i-2,1] = validNum
     return coordinatesArray
 
-def ValidNumApproximationGPU(hexasNum, hexaArray, comboArray):
+def ValidNumApproximationGPU(hexasNum: int, hexaArray: np.array, comboArray: np.array):
     """
     Calculates the expected number of valid combos within the domain (i.e. [1, A] where A is the upper bound of
     the critical area), calculates the actual number of valid combos and calulates the error between the two.

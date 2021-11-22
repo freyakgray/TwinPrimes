@@ -79,7 +79,7 @@ def test_GenerateCombosGPU():
     assert np.array_equal(correctCombo,comboArray)
 
 def test_FindInvalidChainsGPU():
-    invalidStart, maxInvalid, criticalZoneSize = gpu.FindInvalidChainsGPU(correctCombo,squareSextands)
+    invalidStart, maxInvalid, criticalZoneSize = gpu.FindInvalidChainsGPU(correctCombo,hexas)
     assert invalidStart == 48
     assert maxInvalid == 12
     assert criticalZoneSize == 12 
@@ -95,7 +95,7 @@ def test_FindAverageGapGPU():
     assert gap == 10.47173853199667
 
 def test_ValidCoordinatesGPU():
-    coordinates = gpu.ValidCoordinatesGPU(correctCombo, squareSextands)
+    coordinates = gpu.ValidCoordinatesGPU(correctCombo, hexas)
     coarCorrect = np.array([[2, 2],
                             [3, 1],
                             [4, 1],
@@ -104,7 +104,7 @@ def test_ValidCoordinatesGPU():
     assert np.array_equal(coordinates, coarCorrect)
 
 def test_ValidNumApproximationGPU():
-    comboApproximation, comboTrue, errorPercent = gpu.ValidNumApproximationGPU(6, hexas, squareSextands, correctCombo)
+    comboApproximation, comboTrue, errorPercent = gpu.ValidNumApproximationGPU(6, hexas, hexas, correctCombo)
     assert comboApproximation == 14.054366685945633
     assert comboTrue == 9
     assert errorPercent == 56.159629843840364
