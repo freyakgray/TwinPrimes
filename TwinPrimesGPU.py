@@ -83,7 +83,7 @@ def RunGenerateCombosGPU(hexasChecked: int, length: int, hexaArray: np.array):
     Returns: 
     combosLArray (numpy array): A 2d array of combos and their validity 
     """
-    comboArray = np.zeros([length, (hexasChecked + 2)],dtype = int)
+    comboArray = np.zeros([length, (hexasChecked + 2)],dtype = np.uint64)
     comboArray[:,-1] = 1
     
     deviceCombo = cuda.to_device(comboArray, stream = stream)
