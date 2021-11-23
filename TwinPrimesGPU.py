@@ -1,5 +1,5 @@
 import numpy as np
-from numba import njit, cuda
+from numba import cuda
 from numpy.lib import math
 
 stream = cuda.stream()
@@ -120,7 +120,7 @@ def FindInvalidChainsGPU(hexasChecked: int, hexaArray: np.array):
         hexorial *= hexaArray[0,i]
     hexorial = int((hexorial - 1)/2)
 
-    comboArray = RunGenerateCombosGPU(hexasChecked,0,hexorial,hexaArray)
+    comboArray = RunGenerateCombosGPU(hexasChecked,hexorial,hexaArray)
 
     for i in range(hexorial):
         if(comboArray[i,-1] == 0):
@@ -192,31 +192,31 @@ def ValidCoordinatesGPU(comboArray: np.array, hexaArray: np.array):
     for i in range(2, comboArray.shape[1] - 1):
         coordinatesArray[i-2,0] = i
         validNum = 0
-        for j in range(int(hexaArray[2,i-2]), int(hexaArray[2, i-1]+1)):
+        for j in range(int(hexaArray[2,i-2]), int(hexaArray[2, i-1])):
             if(comboArray[j,-1] == 1):
                 validNum += 1
         coordinatesArray[i-2,1] = validNum
     return coordinatesArray
 
-def ValidNumApproximationGPU(hexasNum: int, hexaArray: np.array, comboArray: np.array):
+def ValidNumApproximationGPU(hexasChecked: int, hexaArray: np.array, comboArray: np.array):
     """
     Calculates the expected number of valid combos within the domain (i.e. [1, A] where A is the upper bound of
     the critical area), calculates the actual number of valid combos and calulates the error between the two.
     
     Parameters: 
-    hexasNum (int): The number of hexas to be checked
+    hexasChecked (int): The number of hexas to be checked
     hexaArray (numpy array): An array of hexas, sextands and square sextands generated with GenerateHexasGPU
-    comboArray (numpy array): An array of combos generated with GenerateCombosGPU. The array must have been generated with at least hexasNum of hexas.
+    comboArray (numpy array): An array of combos generated with GenerateCombosGPU. The array must have been generated with at least hexasChecked of hexas.
 
     Returns: 
     comboApproximation (float): The expected number of valid combos
     comboTrue (int): The actual number of valid combos
     errorPercent (int): The error between comboApproximation and comboTrue
     """
-    endPoint = int(hexaArray[2,hexasNum - 1])
+    endPoint = int(hexaArray[2,hexasChecked - 1])
     
     comboApproximation = 1
-    for i in range(hexasNum):
+    for i in range(hexasChecked):
         comboApproximation *= (float(hexaArray[0,i]-2))/(float(hexaArray[0,i]))
     comboApproximation *= endPoint
 
