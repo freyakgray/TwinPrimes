@@ -70,7 +70,8 @@ def GenerateCombosGPU(hexasChecked: int, length: int, hexaArray: np.array, combo
       if(y!= 0 or y!= (hexasChecked + 2)):
         comboArray[x, (y + 1)] = (x % hexaArray[0,y])
         if(x % hexaArray[0,y] == hexaArray[1,y]) or (x % hexaArray[0,y] == hexaArray[0,y] - hexaArray[1,y]):
-          comboArray[x,-1] = 0
+            if(x != hexaArray[1,y]):
+                comboArray[x,-1] = 0
 
 def RunGenerateCombosGPU(hexasChecked: int, length: int, hexaArray: np.array):
     """
