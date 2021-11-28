@@ -58,8 +58,8 @@ def GenerateCombosGPU(hexasChecked: int, length: int, hexaArray: np.array, combo
     Last column indicates validity, 0 for invalid, 1 for valid.
     
     Parameters: 
-    hexasChecked (int): The number of hexas checked (must be less than the number of hexas generated)
-    length (int): the last index to check combo validity
+    hexasChecked (int): The number of hexas checked must be less than the number of hexas generated)
+    length (int): the number of indices to check combo validity
     hexaArray (numpy array): An array of hexas, sextands and square sextands
     comboArray (numpy array): A 2d array that the function will alter with the index, combo and validity
     """
@@ -81,10 +81,11 @@ def RunGenerateCombosGPU(hexasChecked: int, length: int, hexaArray: np.array):
     
     Parameters:
     hexasChecked (int): The number of hexas checked (must be less than the number of hexas generated)
-    length int): The number of indices to check
+    length (int): The number of indices to check
+    hexaArray (numpy array): An array of hexas, sextands and square sextands
     
     Returns: 
-    combosLArray (numpy array): A 2d array of combos and their validity 
+    combosArray (numpy array): A 2d array of combos and their validity 
     """
     comboArray = np.zeros([length, (hexasChecked + 2)],dtype = np.uint64)
     comboArray[:,-1] = 1
