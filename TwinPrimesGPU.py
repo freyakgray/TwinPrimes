@@ -67,6 +67,8 @@ def GenerateCombosGPU(hexasChecked: int, length: int, hexaArray: np.array, combo
     if(x < length and y < hexasChecked):
       if(y == 0):
         comboArray[x,0] = x
+      if(x == 0):
+          comboArray[0,-1] = 0
       if(y!= 0 or y!= (hexasChecked + 2)):
         comboArray[x, (y + 1)] = (x % hexaArray[0,y])
         if(x % hexaArray[0,y] == hexaArray[1,y]) or (x % hexaArray[0,y] == hexaArray[0,y] - hexaArray[1,y]):
@@ -193,6 +195,7 @@ def ValidCoordinatesGPU(comboArray: np.array, hexaArray: np.array):
     for i in range(2, comboArray.shape[1] - 1):
         coordinatesArray[i-2,0] = i
         validNum = 0
+        print(int(hexaArray[2,i-2]), int(hexaArray[2, i-1]))
         for j in range(int(hexaArray[2,i-2]), int(hexaArray[2, i-1])):
             if(comboArray[j,-1] == 1):
                 validNum += 1
