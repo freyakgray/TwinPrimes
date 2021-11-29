@@ -1,3 +1,13 @@
+"""
+This is an analytical tool for gathering data about "hexas" that will be used to prove the twin primes conjecture.
+This implementation utilizes Numba for CUDA GPU's to write GPU kernels to improve the performance of the tool.
+
+Requirements: 
+CUDA-enabled GPU with compute capability 2.0 or above with an up-to-data Nvidia driver
+CUDA toolkit version 8.0 or higher
+Numba version 0.53 or higher
+Contributors: Robbie Jordan, Freya Gray, Lucas Nieddu, Cory Gamble"""
+
 import numpy as np
 from numba import cuda
 from numpy.lib import math
@@ -11,10 +21,9 @@ def GenerateHexasGPU(hexaArray: np.array):
 
     Parameters: 
     hexaArray (numpy array): an empty numpy array where the hexas, sextands and square sextands will be populated. 
-    Size of the array will determine the number of hexas, sextands and square sextands  generated. 
+    Size of the array will determine the number of hexas, sextands and square sextands generated. 
     The array must be sent to the host with cuda.to_device.
     """
-    hexas = hexaArray.size
     x,y = cuda.grid(2)
     if(x < hexaArray.shape[0] and y < hexaArray.shape[1]):
         if(x == 0 ):
@@ -71,9 +80,8 @@ def GenerateCombosGPU(hexasChecked: int, length: int, hexaArray: np.array, combo
           comboArray[0,-1] = 0
       if(y!= 0 or y!= (hexasChecked + 2)):
         comboArray[x, (y + 1)] = (x % hexaArray[0,y])
-        if(x % hexaArray[0,y] == hexaArray[1,y]) or (x % hexaArray[0,y] == hexaArray[0,y] - hexaArray[1,y]):
-            if(x != hexaArray[1,y]):
-                comboArray[x,-1] = 0
+        if((x % hexaArray[0,y] == hexaArray[1,y] or (x % hexaArray[0,y] == hexaArray[0,y] - hexaArray[1,y])) and x != hexaArray[1,y]):
+            comboArray[x,-1] = 0
 
 def RunGenerateCombosGPU(hexasChecked: int, length: int, hexaArray: np.array):
     """
@@ -206,7 +214,7 @@ def ValidCoordinatesGPU(comboArray: np.array, hexaArray: np.array):
 def ValidNumApproximationGPU(hexasChecked: int, hexaArray: np.array, comboArray: np.array):
     """
     Calculates the expected number of valid combos within the domain (i.e. [1, A] where A is the upper bound of
-    the critical area), calculates the actual number of valid combos and calulates the error between the two.
+    the critical area), calculates the actual number of valid combos and calculates the error between the two.
     
     Parameters: 
     hexasChecked (int): The number of hexas to be checked
