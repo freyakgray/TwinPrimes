@@ -43,11 +43,11 @@ def FindInvalidChains(n):
     
     for i in range(n):
         hexorial *= hexasList[i]	
-    for i in range((hexorial - 1) / 2):# Only need half the hexorial because validity is mirrored
+    for i in range((hexorial - 1) // 2):# Only need half the hexorial because validity is mirrored
         valid = True
 		# check  if the index is valid With Respect To (WRT) each hexa checked
 		# NOTE: Take advantage of sextand-modulo reduction (only need to check sextand modulo h)
-        for j in n:
+        for j in range(n):
             if(i % hexasList[j] == sextandsList[i] or i % hexasList[j] == hexasList[j] - sextandsList[j]):
                 valid = False
 			
@@ -60,9 +60,9 @@ def FindInvalidChains(n):
             else:
                 invalidLength = 0
 	#Visual output
-    print("Start of max chain: " + str(invalidStart) + '\n'+ 
-    "Max length chain: " + str(maxInvalid) + '\n' + 
-    "Critical Zone size: " + str((squareSextandsList[n - 1] - squareSextandsList[n - 2])))
+    return "Start of max chain: " + str(invalidStart) + '\n'+ \
+    "Max length chain: " + str(maxInvalid) + '\n' + \
+    "Critical Zone size: " + str((squareSextandsList[n - 1] - squareSextandsList[n - 2]))
 
 def GenerateCombo(hexasChecked, index):
     """
@@ -100,13 +100,15 @@ def ViewCombo(hexasChecked, start, length):
     assert hexasChecked,length >= 1
     combosList = []
     end = start + length
+    returnString = ""
     print("Hexas checked: " + str(hexasChecked) + "\n")
     for i in range(start,end):
         combo = str(i) + ": "
         combo += GenerateCombo(hexasChecked, i)
         combosList.insert(i, combo)
+        returnString += combo + "\n"
         print(combo + "\n")
-    return combosList
+    return returnString
 
 def ViewCritCombos(hexasChecked):
     """INPUT: 
@@ -136,8 +138,8 @@ def FindAverageGap(hexasChecked):
         num *= hexasList[i]
         denom *= hexasList[i]-2
     gap = num/denom
-    print(str(num) + " / " + str(denom) + "\n" + str(gap))
-    return num, denom, gap
+    return "Average Gap: " + str(gap) + "\n"
+    #return num, denom, gap
 	
 def ValidCoordinates(hexasNum):
     """INPUTS:
@@ -174,6 +176,8 @@ def ValidCoordinates(hexasNum):
         combo += str(validNum) + ")"
         with open("valid_coordinates.txt", "a") as file:
             file.write(combo + '\n')
+
+    return file_name + " was generated for " + str(hexasNum) + " hexas."
 
 def GenerateCombos(hexasNum):
     """INPUTS:
@@ -266,6 +270,8 @@ def GenerateCombos(hexasNum):
         file.write("Max chain start: ")
         file.write(str(invalidStart))
 
+    return file_name + " was generated for " + str(hexasNum) + " hexas."
+
 
 def ValidNumApproximation(hexasNum):
     """INPUTS: hexasNum
@@ -340,21 +346,23 @@ def ValidNumApproximation(hexasNum):
         file.write("Error: ")
         file.write(str(error_percentage))
         file.write("%")
-    print("Checking to s = ", str(endPoint))
-    print("Approximate combos: ", str(prodApprox))
-    print("Number of valid combos: ", str(prodTrue))
-    print("Error: ", str(error_percentage))
+    return "Checking to s = " + str(endPoint) + "\n"  \
+    "Approximate combos: " + str(prodApprox) + "\n"  \
+    "Number of valid combos: " + str(prodTrue) + "\n"  \
+    "Error: " + str(error_percentage)
+
 
 def ViewCritArea():
     """
     OUTPUT: 
     Displays the start and end indices of the critical area being examined
     """
+    result = "*** critical area ***\n"
     length = len(hexasList) - 1
     limit = hexasList[length]
     subtend = hexasList[length - 1]
     start = (subtend ** 2 - 1) / 6
     end = (limit ** 2 - 1) / 6
-    print("*** critical area ***")
-    print("start:", int(start))
-    print("end:", int(end))
+    result += "start: " + str(int(start)) + "\n"
+    result += "end: " + str(int(end)) + "\n"
+    return result
