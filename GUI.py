@@ -26,7 +26,6 @@ class GUI(Tk):
         self.selection_entries = []
         self.selection_inputs = []
         self.inputs_for_run = {}
-        self.output_labels = []
 
         # message file
         with open("Welcome.txt", "r") as f:
@@ -96,8 +95,7 @@ class GUI(Tk):
     def getSelections(self):
         self.selection_inputs.clear()
         self.inputs_for_run.clear()
-        for o in self.output_labels:
-            o.destroy()
+
         for l in self.function_labels:
             l.destroy()
         for e in self.selection_entries:
@@ -233,40 +231,28 @@ class GUI(Tk):
                     
             r += 1
         if len(self.selected_functions) > 0:
-            Button(self, text="Run", command=lambda: self.run(r)).grid(row=r, column=0)
+            Button(self, text="Run", command=self.run).grid(row=r, column=0)
         
 
-    def run(self, r):
-        r += 1
+    def run(self):
 
-        for o in self.output_labels:
-            o.destroy()
-
-        label = Label(self, text="Output:")
-        self.output_labels.append(label)
-        label.grid(row=r, column=0)
-
-        r += 1
         for k in self.inputs_for_run:
             if k == "View Critical Area":
-                label = Label(self, text=tp.ViewCritArea())   
+                tp.ViewCritArea()
             elif k == "Find Average Gap":
-                label = Label(self, text=tp.FindAverageGap(int(self.inputs_for_run[k].get())))
+                tp.FindAverageGap(int(self.inputs_for_run[k].get()))
             elif k == "Valid Coordinates":
-                label = Label(self, text=tp.ValidCoordinates(int(self.inputs_for_run[k].get())))
+                tp.ValidCoordinates(int(self.inputs_for_run[k].get()))
             elif k == "Generate Combo":
-                label = Label(self, text=tp.GenerateCombo(self.inputs_for_run[k][0].get(), self.inputs_for_run[k][1].get()))
+                tp.GenerateCombo(self.inputs_for_run[k][0].get(), self.inputs_for_run[k][1].get())
             elif k == "View Combo":
-                label = Label(self, text=tp.ViewCombo(self.inputs_for_run[k][0].get(), self.inputs_for_run[k][1].get(), self.inputs_for_run[k][2].get()))
+                tp.ViewCombo(self.inputs_for_run[k][0].get(), self.inputs_for_run[k][1].get(), self.inputs_for_run[k][2].get())
             elif k == "View Crit Combos":
-                label = Label(self, text=tp.ViewCritCombos(int(self.inputs_for_run[k].get())))
+                tp.ViewCritCombos(int(self.inputs_for_run[k].get()))
             elif k == "Generate Combos":
-                label = Label(self, text=tp.GenerateCombos(int(self.inputs_for_run[k].get())))
+                tp.GenerateCombos(int(self.inputs_for_run[k].get()))
             elif k == "Valid Num Approx":
-                label = Label(self, text=tp.ValidNumApproximation(int(self.inputs_for_run[k].get())))
-            self.output_labels.append(label)
-            label.grid(row=r, column=0)
-            r += 1
+                tp.ValidNumApproximation(int(self.inputs_for_run[k].get()))
             
 
     def removeEntry(self):
