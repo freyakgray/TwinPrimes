@@ -11,6 +11,7 @@ Contributors: Robbie Jordan, Freya Gray, Lucas Nieddu, Cory Gamble"""
 import numpy as np
 from numba import cuda
 from numpy.lib import math
+import matplotlib.pyplot as plt
 
 stream = cuda.stream()
 
@@ -204,12 +205,26 @@ def ValidCoordinatesGPU(comboArray: np.array, hexaArray: np.array):
     for i in range(2, comboArray.shape[1] - 1):
         coordinatesArray[i-2,0] = i
         validNum = 0
-        print(int(hexaArray[2,i-2]), int(hexaArray[2, i-1]))
         for j in range(int(hexaArray[2,i-2]), int(hexaArray[2, i-1])):
             if(comboArray[j,-1] == 1):
                 validNum += 1
         coordinatesArray[i-2,1] = validNum
     return coordinatesArray
+
+def plotCoordinates(coordinatesArray: np.array):
+    """ 
+    Plots valid coordinates 
+    Parameters: 
+    coordinatesArray (numpy array): An array of coordinates where the first column is the number of hexas checked 
+    and the second column is the number of valid combos in critical area generated with ValidCoordinatesGPU
+
+    Returns:
+    plot: A plot of valid coordinates
+    """
+    x = coordinatesArray[:,:1]
+    y = coordinatesArray[:,-1:]
+    plot = plt.plot(x,y)
+    return plot
 
 def ValidNumApproximationGPU(hexasChecked: int, hexaArray: np.array, comboArray: np.array):
     """
