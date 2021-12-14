@@ -8,6 +8,7 @@ before_install:
   - pip install coverage
   - pip install numpy
   - pip install numba
+  - pip install matplotlib
 script:
   - coverage run -m pytest Tests
   - coverage xml
