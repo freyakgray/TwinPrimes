@@ -223,7 +223,7 @@ def plotCoordinates(coordinatesArray: np.array):
     """
     x = coordinatesArray[:,:1]
     y = coordinatesArray[:,-1:]
-    plot = plt.plot(x,y)
+    plot = plt.plot(x, y, linestyle = 'None', marker=".", markersize=5)
     return plot
 
 def ValidNumApproximationGPU(hexasChecked: int, hexaArray: np.array, comboArray: np.array):
