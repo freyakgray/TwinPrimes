@@ -42,7 +42,6 @@ from numba import jit
 
 # Numpy
 import numpy as np
-import pandas as pd
 
 # os for file writing - Only used in WriteValidCoordinates
 import os
