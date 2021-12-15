@@ -1,0 +1,3 @@
+Welcome to the Twin Primes Analytics Tool!
+To begin, click Generate Hexas then enter a number.
+The number entered will be the length of the hexas list.
