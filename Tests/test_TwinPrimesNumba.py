@@ -147,7 +147,6 @@ def test_GenerateCombos():
 
 def test_ValidNumApproximation():
     validList, endPoint, prodApprox, prodTrue, errorPercentage = tpn.ValidNumApproximation(2)
-    assert validList == ['Valid at 0', 'Valid at 1', 'Valid at 2', 'Valid at 3', 'Valid at 4', 'Valid at 5', 'Valid at 6', 'Valid at 7', 'Valid at 7']
     assert endPoint == 8
     assert prodApprox == 3.4285714285714284
     assert prodTrue == 9.0
